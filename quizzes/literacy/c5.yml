@@ -1,0 +1,184 @@
+- id: lit-c5-q1
+  question: >-
+    You ask the AI to draft a donor email from your field notes. The notes don't say when the
+    next distribution will happen. What is the best instruction to include?
+  options:
+    - text: "\"Make the email sound confident; donors don't like uncertainty.\""
+      correct: false
+      why: >-
+        This pushes the AI to fill gaps with confident-sounding details, which is how invented
+        dates end up in donor correspondence.
+    - text: "\"Estimate a realistic date based on typical humanitarian timelines.\""
+      correct: false
+      why: >-
+        This asks the AI to invent a date. A plausible guess in a donor email can become a
+        commitment you can't keep.
+    - text: "\"If anything needed is missing, put a placeholder in [square brackets] instead of inventing it.\""
+      correct: true
+      why: >-
+        Correct. Placeholders show you exactly where information is missing, so you fill it in
+        with real facts rather than discovering an invented date later.
+    - text: "No instruction is needed; the AI never adds information that isn't in the notes."
+      correct: false
+      why: >-
+        AI tools often fill gaps with plausible details, especially in drafting. You need to
+        tell it what to do when information is missing.
+
+- id: lit-c5-q2
+  question: >-
+    The AI summarizes a field note as "1,200 households have been displaced and 600 people are
+    at the school." The note said "approx 1,200 households (our estimate)" and "maybe 600
+    people". What has the summary lost?
+  options:
+    - text: "The uncertainty: both figures were estimates, and the summary presents them as facts."
+      correct: true
+      why: >-
+        Correct. Caveats and hedging words are among the first things a summary drops. Ask the
+        AI to keep words like "estimated" and "approx" exactly as they appear, and to list
+        caveats separately.
+    - text: "Nothing important; rounding and simplifying is what a summary is for."
+      correct: false
+      why: >-
+        Shortening is the point of a summary, but turning an estimate into a fact changes the
+        meaning. A decision-maker may act differently on a firm figure.
+    - text: "The figures are wrong; the AI must have misread the numbers."
+      correct: false
+      why: >-
+        The numbers themselves are right. What changed is their status: estimates became
+        certainties. That kind of loss is harder to spot than a wrong number.
+    - text: "The summary should have converted households into people for consistency."
+      correct: false
+      why: >-
+        Converting units needs an assumed household size that isn't in the note, which would
+        add an invented figure. Keep households and people separate.
+
+- id: lit-c5-q3
+  question: >-
+    You need a French version of a short partner briefing. The AI's translation reads smoothly.
+    What is the most useful next step?
+  options:
+    - text: "Send it; smooth, natural French means the translation is accurate."
+      correct: false
+      why: >-
+        Fluency isn't accuracy. A smooth translation can still change a number, drop a
+        condition or use a non-standard term.
+    - text: "Ask the same chat, \"Is this translation correct?\" and accept its answer."
+      correct: false
+      why: >-
+        The same chat tends to defend its own work. A fresh chat, a back-translation or a
+        human reader gives a more independent check.
+    - text: "Translate it into five more languages so it can be compared across versions."
+      correct: false
+      why: >-
+        More translations add more work and more places for errors, without checking the one
+        you need.
+    - text: "Check numbers, names and key terms, then use a fresh chat or a colleague who reads French to compare it with the source."
+      correct: true
+      why: >-
+        Correct. Numbers, names and official terms are where translations go wrong most often.
+        An independent comparison catches changes in meaning and tone.
+
+- id: lit-c5-q4
+  question: >-
+    You paste a distribution table and ask for kits per household in each village. The AI gives
+    neat figures. What should you do before using them in a SitRep?
+  options:
+    - text: "Nothing; computers are good at arithmetic, so the numbers will be correct."
+      correct: false
+      why: >-
+        A chat model doesn't always calculate. It may predict a number that looks computed.
+        Even with a calculation feature, it can misread a column.
+    - text: "Check that it read the table correctly (totals) and recalculate at least one figure yourself."
+      correct: true
+      why: >-
+        Correct. If it read the totals wrong, everything after is wrong. One quick calculator
+        check catches most misread columns and invented results.
+    - text: "Ask it to be more careful and send the same question again."
+      correct: false
+      why: >-
+        Asking for care doesn't create accuracy, and a second answer may differ without being
+        right. Verify against the table instead.
+    - text: "Round the figures, since small errors don't matter in a SitRep."
+      correct: false
+      why: >-
+        Rounding doesn't fix a misread column or a wrong row. Errors in distribution figures
+        can lead to the wrong village being prioritized.
+
+- id: lit-c5-q5
+  question: >-
+    In the SitRep workflow, why does the AI write the draft from the checked fact table rather
+    than directly from the raw field notes?
+  options:
+    - text: "Because the AI can't read raw field notes."
+      correct: false
+      why: >-
+        It can read them. The table is there for you, not for the AI: it gives you something
+        short and structured to check.
+    - text: "Because tables use fewer tokens, which saves money."
+      correct: false
+      why: >-
+        Token savings are minor here. The real reason is accuracy and checkability.
+    - text: "Because a human has corrected the facts in the table, so the draft starts from verified information and drift is easier to spot."
+      correct: true
+      why: >-
+        Correct. Breaking the task into extract, check, draft and self-review puts the human
+        check where it's easiest, on a structured table, before fluent prose can hide errors.
+    - text: "Because the country director prefers tables to prose."
+      correct: false
+      why: >-
+        The final SitRep is still prose with headings. The table is an intermediate step for
+        checking facts.
+
+- id: lit-c5-q6
+  question: >-
+    Two reports give different figures for displaced households. Which part of the SitRep
+    workflow should you keep rather than delegate to the AI?
+  options:
+    - text: "Deciding which figure to use and how to present the disagreement."
+      correct: true
+      why: >-
+        Correct. Resolving conflicting sources needs context, contacts and accountability. The
+        AI can lay out both figures and their sources; a person decides.
+    - text: "Formatting the table of figures."
+      correct: false
+      why: >-
+        Formatting is a low-risk, easily checked task. It's a good one to delegate.
+    - text: "Listing every figure with its source and date."
+      correct: false
+      why: >-
+        Extracting and listing is a good AI task, as long as you check the list against the
+        sources.
+    - text: "Suggesting alternative wordings for the headline."
+      correct: false
+      why: >-
+        Generating options is one of AI's strengths. You choose which wording is accurate and
+        appropriate.
+
+- id: lit-c5-q7
+  question: >-
+    A colleague wants to use AI to decide which households are eligible for cash assistance,
+    by pasting the full beneficiary list with names and circumstances. What is the best
+    advice?
+  options:
+    - text: "Go ahead, as long as the prompt says \"be fair and unbiased\"."
+      correct: false
+      why: >-
+        A prompt instruction can't guarantee fairness or protect the data. The decision and the
+        data both need more care than that.
+    - text: "Go ahead, but only if the tool is an enterprise version."
+      correct: false
+      why: >-
+        Enterprise tools are safer, but approval depends on the kind of data. And even with
+        approval, eligibility decisions shouldn't be delegated to a chatbot.
+    - text: "Use AI for the decision, then spot-check a few households by hand."
+      correct: false
+      why: >-
+        Spot-checking helps with low-stakes tasks. For decisions about people's assistance, the
+        risk of unfair or wrong outcomes is too high, and the personal data may not be
+        approved for the tool.
+    - text: "Keep this with people: it is a high-stakes decision about individuals and involves personal data the tool may not be approved for."
+      correct: true
+      why: >-
+        Correct. Decisions about people and use of personal data belong in the "keep" column.
+        AI might help with a small, anonymised, checkable part, such as drafting criteria for
+        discussion, if your rules allow it.

@@ -1,0 +1,55 @@
+INHERIT: mkdocs.yml
+site_name: Practical AI — Instructor Edition
+site_dir: site-instructor
+
+# Build instructor pages too; shared snippets are still never built on their own.
+exclude_docs: |
+  shared/
+
+nav:
+  - Home: index.md
+  - AI Literacy:
+      - literacy/index.md
+      - "Class 1 · What AI Is": literacy/c1.md
+      - "Class 2 · How Chatbots Work": literacy/c2.md
+      - "Class 3 · Prompting Well": literacy/c3.md
+      - "Class 4 · Giving AI the Right Information": literacy/c4.md
+      - "Class 5 · AI at Work": literacy/c5.md
+      - "Class 6 · Checking AI": literacy/c6.md
+      - "Class 7 · Agents & Automation": literacy/c7.md
+      - "Class 8 · Safe & Responsible AI": literacy/c8.md
+  - AI Engineering:
+      - engineering/index.md
+      - "Pre-work · Setup": engineering/prework.md
+      - "Class 1 · Foundations": engineering/c1.md
+      - "Class 2 · Prompting & Structured Outputs": engineering/c2.md
+      - "Class 3 · Building with Code": engineering/c3.md
+      - "Class 4 · Context Engineering & RAG": engineering/c4.md
+      - "Class 5 · Harness & Tools": engineering/c5.md
+      - "Class 6 · Agents & Orchestration": engineering/c6.md
+      - "Class 7 · Evals & Observability": engineering/c7.md
+      - "Class 8 · Security & Production": engineering/c8.md
+  - Reference:
+      - AI Map: ai-map.md
+      - Glossary: glossary.md
+      - About: about.md
+  - Instructor:
+      - instructor/index.md
+      - Literacy:
+          - "Class 1 guide": instructor/literacy-c1.md
+          - "Class 2 guide": instructor/literacy-c2.md
+          - "Class 3 guide": instructor/literacy-c3.md
+          - "Class 4 guide": instructor/literacy-c4.md
+          - "Class 5 guide": instructor/literacy-c5.md
+          - "Class 6 guide": instructor/literacy-c6.md
+          - "Class 7 guide": instructor/literacy-c7.md
+          - "Class 8 guide": instructor/literacy-c8.md
+      - Engineering:
+          - "Class 1 guide": instructor/engineering-c1.md
+          - "Class 2 guide": instructor/engineering-c2.md
+          - "Class 3 guide": instructor/engineering-c3.md
+          - "Class 4 guide": instructor/engineering-c4.md
+          - "Class 5 guide": instructor/engineering-c5.md
+          - "Class 6 guide": instructor/engineering-c6.md
+          - "Class 7 guide": instructor/engineering-c7.md
+          - "Class 8 guide": instructor/engineering-c8.md

@@ -1,0 +1,127 @@
+- id: eng-c4-q1
+  question: "A duty officer asks the SitRep Assistant \"Is the crossing to Kessan still standing?\" The logistics update says the bridge collapsed, but keyword search returns only reports that happen to mention Kessan. What is the best fix?"
+  options:
+    - text: "Increase the chunk size so each chunk contains more words that might match."
+      correct: false
+      why: "Bigger chunks contain more words, but still not \"crossing\" or \"standing\". The problem is that the question and the answer use different words."
+    - text: "Skip retrieval and paste the whole library into a large context window."
+      correct: false
+      why: "It may work for six documents, but it doesn't scale, costs more on every call, and brings back the attention problems of very long context."
+    - text: "Use hybrid search: combine keyword (BM25) scores with embedding similarity, which matches meaning rather than exact words."
+      correct: true
+      why: "Embeddings put \"crossing\" near \"bridge\", so the vector side catches the paraphrase while the keyword side keeps precision for exact names and ids. In the lab, hybrid ranks the logistics update first."
+    - text: "Lower the temperature so the model answers more precisely."
+      correct: false
+      why: "Temperature affects generation, not retrieval. If the right chunk never reaches the model, no setting can make the answer correct."
+
+- id: eng-c4-q2
+  question: "A team's model accepts one million tokens, so they paste all 300 field reports into every prompt instead of retrieving the top 8 chunks. The answers get worse, not better. What is the most likely reason?"
+  options:
+    - text: "The relevant passages are diluted by a lot of irrelevant and contradictory text, and models use information in the middle of very long contexts less reliably."
+      correct: true
+      why: "A bigger window is capacity, not a target. Distractors, superseded figures and the lost-in-the-middle effect all grow with context length, and so does the cost of every call."
+    - text: "The model silently ignores everything after the first 100,000 tokens."
+      correct: false
+      why: "Models that accept long contexts do process them; the problem is how reliably they use what's there, not a hidden cut-off. Check the provider's limits, but this isn't the usual cause."
+    - text: "Longer context is always better, so the prompt wording must be at fault."
+      correct: false
+      why: "Quality does not grow with length. Past a point, more context adds noise, cost and latency; careful selection of context usually beats more context."
+    - text: "The model must be fine-tuned on the 300 reports before it can use them."
+      correct: false
+      why: "Fine-tuning changes behaviour, not access to facts, and it cannot keep up with reports that change daily. Retrieval is the right tool here."
+
+- id: eng-c4-q3
+  question: "The Veloria Relief Coalition wants the assistant to answer from field reports that change every day, with citations, and each user may only see reports their office has access to. Which approach fits?"
+  options:
+    - text: "Fine-tune a model on all the reports every week."
+      correct: false
+      why: "Weekly retraining leaves answers up to a week out of date, gives no citations, and once a report is trained into the weights it cannot be hidden from particular users."
+    - text: "Put all the reports in a long context window for every question."
+      correct: false
+      why: "Cost grows with the library on every call, and per-user access means building a different giant context for each user. It also suffers from lost-in-the-middle effects."
+    - text: "Fine-tune once, then ask the model to cite report numbers from memory."
+      correct: false
+      why: "Citations recalled from trained weights are unreliable and often invented. A citation is only trustworthy if it points to text the model was actually given."
+    - text: "RAG: index the reports with metadata, including access rights, filter by the user's permissions at search time, and answer with citations."
+      correct: true
+      why: "RAG makes new reports available as soon as they are indexed, gives traceable citations, and enforces access control in the search itself, before the model sees anything."
+
+- id: eng-c4-q4
+  question: "An English question about displaced families in Bara never retrieves the French community report from Bara, which contains the answer. What should you change first?"
+  options:
+    - text: "Ask the model to answer in French."
+      correct: false
+      why: "The answer's language is not the problem. The French report never reaches the model, so the failure is in retrieval."
+    - text: "Use a multilingual embedding model and/or translate the query into the library's languages and fuse the results (for example with reciprocal rank fusion)."
+      correct: true
+      why: "Multilingual embeddings match meaning across languages; query translation also lets keyword search match. In the lab, adding a French version of the question puts the Bara report on top."
+    - text: "Translate every answer into English after generation."
+      correct: false
+      why: "Post-translation fixes the output language, not what was retrieved. The model still never sees the French report."
+    - text: "Increase k from 4 to 50 so the French report is more likely to be included."
+      correct: false
+      why: "It might appear further down the list, but the context fills with irrelevant chunks and cost rises. Fix why it ranks low instead of widening the net."
+
+- id: eng-c4-q5
+  question: "Asked about the Aramu rainfall forecast, which appears in no document, the assistant fluently answers with a plausible forecast and no citation. What is the most robust fix?"
+  options:
+    - text: "Add \"Do not hallucinate\" to the system prompt."
+      correct: false
+      why: "A rule in the prompt helps, but it is a request, not a guarantee. When the model has nothing to ground on, it often falls back on general knowledge anyway."
+    - text: "Raise the temperature so the model is less certain."
+      correct: false
+      why: "Higher temperature makes output more varied, not more honest, and can make invented answers more likely."
+    - text: "Switch to the largest available model."
+      correct: false
+      why: "Larger models can hallucinate just as fluently. The issue is that no relevant source exists, which no model can fix."
+    - text: "In code, return NOT FOUND without calling the model when no retrieved chunk passes a relevance threshold; also tell the model to reply NOT FOUND when the sources lack the answer, and reject uncited answers."
+      correct: true
+      why: "A code gate before the model and a check after it handle the case the prompt alone cannot. The lab's not-found test proves no model call is made."
+
+- id: eng-c4-q6
+  question: "An answer ends with the citation [aramu-hospital#3], but no chunk with that id was retrieved for this question. How should the system treat it?"
+  options:
+    - text: "Accept it: the model may know a relevant document from training."
+      correct: false
+      why: "A grounded answer can only cite what it was given. A citation to anything else cannot be checked, which makes it an invention."
+    - text: "Flag the citation as invented and treat its claim as unsupported: reject or re-generate the answer, or show it with a clear warning."
+      correct: true
+      why: "Checking citations against the retrieved set is a cheap, deterministic check. An unknown citation means the claim attached to it is ungrounded."
+    - text: "Remove the citation and keep the sentence."
+      correct: false
+      why: "Removing the citation hides the evidence that the claim was invented, and the unsupported claim stays in the SitRep."
+    - text: "Look up aramu-hospital#3 in the index and add it to the sources shown to the user."
+      correct: false
+      why: "If it exists it wasn't retrieved, so the model never saw it; if it doesn't exist, you can't add it. Either way the claim was not based on that source."
+
+- id: eng-c4-q7
+  question: "Every SitRep Assistant call starts with the same 3,000-token system prompt and style guide, but the provider reports almost no cached tokens. The system prompt begins with \"Current time: <timestamp>\". What should you change?"
+  options:
+    - text: "Move the timestamp and anything else that changes per call to the end of the prompt, so the long, identical part comes first."
+      correct: true
+      why: "Caching reuses an exactly identical prefix. A timestamp at the top changes the prefix on every call and silently disables the cache: stable content first, variable content last."
+    - text: "Raise the temperature so the provider recognises repeated prompts."
+      correct: false
+      why: "Temperature affects sampling of the output. Caching depends only on whether the input prefix is identical."
+    - text: "Fine-tune the model on the style guide so it doesn't need to be sent."
+      correct: false
+      why: "That is a large, costly change to fix a one-line ordering problem, and it loses the ability to update the style guide instantly."
+    - text: "Nothing: caching only works for fine-tuned models."
+      correct: false
+      why: "As of 2026 the major providers offer prompt caching on standard models, some automatically, some when you mark the cacheable part."
+
+- id: eng-c4-q8
+  question: "A teammate proposes cutting the chunk size from 400 to 150 tokens \"for more precise answers\". How should the team decide?"
+  options:
+    - text: "Accept it: smaller chunks are always more precise."
+      correct: false
+      why: "Smaller chunks match narrow questions better but lose context (\"it was closed\": what was?). The best size depends on your documents and questions."
+    - text: "Ask a few colleagues whether the new answers feel better."
+      correct: false
+      why: "Impressions from a handful of questions are noisy and biased towards fluent answers. Retrieval quality needs to be measured."
+    - text: "Re-run a golden set of realistic questions with known source documents, and compare recall@k and citation accuracy before and after."
+      correct: true
+      why: "Change one thing, measure, keep it only if the numbers improve. Include unanswerable questions too, to check the not-found path."
+    - text: "Judge by whether the generated answers read more fluently."
+      correct: false
+      why: "Fluency says nothing about whether the right chunk was retrieved. A fluent, well-written answer can still be grounded in the wrong document."

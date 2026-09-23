@@ -1,0 +1,127 @@
+- id: eng-c1-q1
+  question: "In your SitRep decomposition, one step is \"add up displaced households per district across today's 12 reports\". Who should own it?"
+  options:
+    - text: "The model — it has already read the reports, so it can add the figures in the same call."
+      correct: false
+      why: "Models see numbers as split tokens and are unreliable at summing long columns. Having read the reports does not make the model a calculator."
+    - text: "Deterministic code — summing is arithmetic with one right answer, and one line of Python does it exactly and testably."
+      correct: true
+      why: "Pattern recognition: arithmetic is a code step. Code is exact, cheap and unit-testable; the model's job is extracting the figures, which code then adds."
+    - text: "A human — only a person can be trusted with figures that go to partners."
+      correct: false
+      why: "A human should resolve conflicts and approve the final report, but hand-adding 12 reports is slow and error-prone. Give people judgement, not arithmetic."
+    - text: "The model, followed by a second model call that checks the sum."
+      correct: false
+      why: "Two unreliable calculators do not make a reliable one, and you pay twice. When a deterministic answer exists, compute it in code."
+
+- id: eng-c1-q2
+  question: "A SitRep extraction pilot in English cost USD 400 a month. The service is being rolled out to offices that report in Arabic and Russian at the same volume. What is the best budgeting approach?"
+  options:
+    - text: "Keep USD 400 — the same messages carry the same information, so they cost the same."
+      correct: false
+      why: "Providers bill per token, not per idea. The same message usually splits into more tokens in scripts that were less common in the tokenizer's training text."
+    - text: "Multiply by six, one factor for each of the six languages the organisation works in."
+      correct: false
+      why: "The number of languages does not multiply the volume. What changes is tokens per message, which differs by language and tokenizer."
+    - text: "Translate everything into English first; that will always be cheaper."
+      correct: false
+      why: "Translation is an extra call that you also pay for, and it can lose meaning. It might be cheaper, or might not. Measure both routes."
+    - text: "Measure token counts for sample Arabic and Russian reports with the model's own tokenizer, and budget from those numbers (expect them to be higher)."
+      correct: true
+      why: "Token counts per language depend on the tokenizer. Measuring real samples with the real tokenizer is the only reliable basis for a budget."
+
+- id: eng-c1-q3
+  question: "You set temperature to 0 on the extraction step. A colleague says: \"Now it's deterministic, so we can drop the schema validation and the FakeLLM tests.\" What is the best reply?"
+  options:
+    - text: "Temperature 0 reduces variation but guarantees neither identical outputs (batching, model updates) nor correct ones, so keep validating and keep testing your own code."
+      correct: true
+      why: "Near-ties can still flip at temperature 0, aliases can point to new model versions, and a consistently wrong answer is still wrong. Validation and tests protect against all of these."
+    - text: "Agreed — at temperature 0 the model always picks the most likely token, so outputs are fixed."
+      correct: false
+      why: "In theory, and nearly in practice. But provider-side batching and floating-point effects can change a near-tie, and a model update changes everything. Don't build on the guarantee."
+    - text: "Set top-p to 0 as well, and then it is truly deterministic."
+      correct: false
+      why: "Stacking sampling settings doesn't remove the other sources of variation, and some models reject or ignore these settings entirely. Design for variation instead."
+    - text: "Keep the tests but drop validation, because the output format will now always be the same."
+      correct: false
+      why: "Format drift, missing fields and invented values can all happen at temperature 0. Validation is what catches them before they reach the SitRep."
+
+- id: eng-c1-q4
+  question: "Your model has a 1-million-token context window. A developer proposes sending all three months of Northern Veloria field reports (about 600,000 tokens) with every SitRep question \"so it never misses anything\". What is the main problem?"
+  options:
+    - text: "None — if it fits in the window, the model will use all of it equally well."
+      correct: false
+      why: "Models attend less reliably to material buried in the middle of very long contexts, and irrelevant text distracts them. Fitting is not the same as being used well."
+    - text: "The model will remember the reports after the first call, so later calls are wasted."
+      correct: false
+      why: "The opposite: models are stateless. Nothing is remembered between calls, which is why the developer would be resending 600,000 tokens every time."
+    - text: "You pay for all 600,000 input tokens on every call, latency rises, and accuracy can fall. Select the relevant reports for each question instead."
+      correct: true
+      why: "Every token sent is billed on every call, long inputs are slow, and focused context usually beats a huge unfocused one. Choosing what goes in is context engineering (Class 4)."
+    - text: "It will fail, because the output has no room left in the window."
+      correct: false
+      why: "600,000 of 1,000,000 tokens leaves plenty of room for output. The real problems are cost, latency and attention, not a hard failure."
+
+- id: eng-c1-q5
+  question: "Asked for the latest cholera case count in Aramu district, a chat model replies with a precise figure and a date. Nothing about Aramu was in the prompt. What is the most likely explanation?"
+  options:
+    - text: "The model looked the figure up in its internal database of health statistics."
+      correct: false
+      why: "An LLM has no database it queries. Everything it 'knows' is encoded in its weights from training, which stops at a knowledge cutoff."
+    - text: "The model generated a plausible-looking answer. Current figures are after its knowledge cutoff and were never in its training data, so they must come from the context or a tool, and be verified."
+      correct: true
+      why: "Next-token prediction produces likely text, not checked facts. For anything recent or local, put the source in the context (or give the model a search tool) and check the figure against the source."
+    - text: "The figure is probably right, because a model would say if it didn't know."
+      correct: false
+      why: "Preference training rewards confident, complete answers, so models often guess instead of saying 'I don't know'. Never rely on the model to flag its own gaps."
+    - text: "Temperature was too high; at temperature 0 it would have given the correct figure."
+      correct: false
+      why: "Temperature changes which likely continuation is picked. It cannot make the model know data it was never trained on."
+
+- id: eng-c1-q6
+  question: "The SitRep inbox receives about 5,000 messages a day, and each must be labelled as one of four types (field report, request, bulletin, other). Which model choice is the best starting point?"
+  options:
+    - text: "A small, fast standard model with a fixed label list and code that rejects any other label, then measure accuracy on a labelled sample and move up only if it falls short."
+      correct: true
+      why: "Short input, few labels and high volume is the textbook case for a small model. Validation in code catches bad labels, and measurement tells you whether to escalate."
+    - text: "The largest reasoning model available, because classification errors are costly."
+      correct: false
+      why: "Reasoning models add latency and output tokens for thinking. At 5,000 calls a day that is expensive, and simple classification rarely benefits. Start small and measure."
+    - text: "A multimodal model, because some messages might contain attachments."
+      correct: false
+      why: "Use multimodal models for steps whose input is images or audio. Labelling message types from text does not need one, and it costs more."
+    - text: "No model — train your own classifier from scratch first."
+      correct: false
+      why: "Possible later, if volume and accuracy needs justify it, but it needs labelled data and upkeep. A prompted small model is the faster, cheaper place to start."
+
+- id: eng-c1-q7
+  question: "To make a key figure more reliable, you ask the model the same question five times and get: 1,200 · 1,450 · 1,200 · 2,650 · 1,450 households. What should the system do?"
+  options:
+    - text: "Average them (about 1,590) and report that."
+      correct: false
+      why: "Averaging different readings of the sources produces a number that no report contains. That is an invented figure with a spurious precision."
+    - text: "Take the most common answer, since 1,200 and 1,450 are tied, pick the higher one to be safe."
+      correct: false
+      why: "With 40% agreement there is no real majority. Picking one hides a real conflict, and 'higher to be safe' is a policy decision a model workflow shouldn't make silently."
+    - text: "Run it 50 more times until one answer wins."
+      correct: false
+      why: "More samples measure the model's uncertainty more precisely but don't resolve it. The disagreement comes from the source data, and more calls only add cost."
+    - text: "Treat the low agreement as a signal: return no figure, flag the conflict (the reports overlap), and send it to a human to resolve."
+      correct: true
+      why: "Self-consistency voting only accepts a majority above a threshold. Low agreement usually means the sources are ambiguous or conflicting, which is a human judgement step."
+
+- id: eng-c1-q8
+  question: "A draft SitRep says \"approximately 300 households affected in Dorra\", but the field team never reached Dorra and no report gives a figure. Which explanation and fix are best?"
+  options:
+    - text: "The model misread a report; fix it by using a model with a bigger context window."
+      correct: false
+      why: "No report contains the figure, so nothing was misread. A bigger window gives the model more text, not a reason to leave gaps empty."
+    - text: "The model is broken; switch providers."
+      correct: false
+      why: "This is normal behaviour for every LLM, not a fault of one provider. The fix belongs in your design, not your vendor choice."
+    - text: "Next-token prediction fills gaps with likely-sounding text. Make \"not stated\" an explicit, acceptable answer, and add a code check that every figure appears in its source report."
+      correct: true
+      why: "The model generates plausible continuations, and a SitRep template makes a number look likely. Allowing 'not stated' removes the pressure to fill the gap, and a source check catches what slips through (Class 2)."
+    - text: "Add \"Do not hallucinate\" to the prompt; that fully prevents it."
+      correct: false
+      why: "Instructions reduce the problem but cannot guarantee anything. You still need a deterministic check between the model and the published report."

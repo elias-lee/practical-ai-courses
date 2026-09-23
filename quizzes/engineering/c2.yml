@@ -1,0 +1,127 @@
+- id: eng-c2-q1
+  question: "You are building the SitRep extractor. Where should the extraction rules and the day's field report go?"
+  options:
+    - text: "Both in the system message, so the model treats the report as authoritative."
+      correct: false
+      why: "The system message is for stable developer instructions. Putting data there gives any instructions hidden in the report the same weight as your rules, and makes the stable part change every call."
+    - text: "Both in one user message, rules first, with no delimiters, since modern models understand context."
+      correct: false
+      why: "It may work on clean inputs, but the model can't reliably tell your instructions from text in the report, and you lose the stable, cacheable, testable system prompt."
+    - text: "Rules, schema and examples in the system message; the report in the user message, fenced in delimiters such as <report> tags."
+      correct: true
+      why: "Stable instructions go in the system prompt, where you version and test them. Per-call data goes in the user message, clearly delimited, so it stays data."
+    - text: "The report in the system message and the rules in the user message, so the rules are read last."
+      correct: false
+      why: "This inverts the roles. Data in the system message is given instruction-level weight, and your rules change from call to call instead of being a fixed, versioned artefact."
+
+- id: eng-c2-q2
+  question: "Your team switches the extractor to the provider's schema-enforced structured-output mode (strict JSON Schema). A colleague proposes deleting the validator and the retry loop. What is the best response?"
+  options:
+    - text: "Keep them: the mode guarantees the shape, not the content (invented figures still pass), and refusals, truncation, provider differences and future model switches can still produce invalid output."
+      correct: true
+      why: "Schema enforcement is an excellent optimisation that removes most retries. Your validator, and especially semantic checks such as 'the source quote appears in the report', remain the contract."
+    - text: "Delete them: strict mode means the output always matches the schema, so validation is redundant."
+      correct: false
+      why: "It matches the shape. A well-formed figure that isn't in the report is still wrong, and refusals or truncated replies can still come back."
+    - text: "Keep the validator but delete the retry loop, because a strict model never needs a second attempt."
+      correct: false
+      why: "When validation fails (a semantic check, a truncated reply), a retry with the error is still the cheapest fix. Removing it turns recoverable cases into failures."
+    - text: "Delete them, and set temperature to 0 to make the output stable instead."
+      correct: false
+      why: "Temperature 0 reduces variation; it does not make the content correct or guarantee the shape. It is not a substitute for validation."
+
+- id: eng-c2-q3
+  question: "The schema requires report_date as a YYYY-MM-DD string. Field notes often say only \"Thurs\", and the extractor keeps returning confident dates such as 2026-03-12. What is the best fix?"
+  options:
+    - text: "Make report_date optional and let the model return null when unsure."
+      correct: false
+      why: "Better than forcing a date, but null is ambiguous (not stated? failed to extract?) and models use it inconsistently. An explicit, named value is clearer and easier to validate."
+    - text: "Add \"Do not guess dates\" to the prompt in capital letters."
+      correct: false
+      why: "Emphasis doesn't fix a contradiction: the schema still demands a date the report doesn't contain. Give the model a legitimate way to say 'unknown'."
+    - text: "Post-process in code: replace any date the model returns with today's date."
+      correct: false
+      why: "That replaces one invented date with another. The report date is unknown, and the output should say so."
+    - text: "Allow \"not stated\" explicitly: in the schema's description, in a rule, in the few-shot example output, and in the validator."
+      correct: true
+      why: "When every field is required and 'unknown' isn't allowed, the schema is telling the model to invent. Making 'not stated' a first-class value everywhere removes that pressure."
+
+- id: eng-c2-q4
+  question: "A reply fails validation: `affected[0].unit: 'persons' must be one of [households, people, families, not stated]`. What should the extractor do next?"
+  options:
+    - text: "Send the original messages again unchanged. At temperature above 0 the next sample will probably be fine."
+      correct: false
+      why: "A blind retry is another draw from the same distribution. The model doesn't know what was wrong, so it may make the same mistake."
+    - text: "Append the model's reply as an assistant message plus a user message listing the exact errors, retry, and after at most 3 attempts raise an error carrying the replies."
+      correct: true
+      why: "Specific feedback in context is what models fix reliably. The cap stops an endless loop, and a loud failure with evidence lets a human pick up the report."
+    - text: "Map 'persons' to 'people' in code and continue."
+      correct: false
+      why: "A small, explicit alias table can be reasonable. But silently repairing whatever the model invents grows into guesswork that hides problems. The retry exists to fix the output at the source."
+    - text: "Keep retrying until the output validates, however many attempts that takes."
+      correct: false
+      why: "Every loop needs a budget. If three specific repair attempts fail, the input usually needs a human, and each further attempt costs money."
+
+- id: eng-c2-q5
+  question: "Your few-shot example shows a flood report from Aramu district with 1,200 households. Extractions for reports from other districts sometimes list \"Aramu\" or \"1,200\". What is happening, and what is the fix?"
+  options:
+    - text: "Example leakage: the model copies content from the example. Keep the pattern but vary the content, for example a landslide in a different district with different figures."
+      correct: true
+      why: "Examples should teach format and literalness, not facts. An example close to real inputs invites copying; a different place and hazard shows the pattern without the content."
+    - text: "The model has memorised Aramu from training; switch to a model with a later knowledge cutoff."
+      correct: false
+      why: "Aramu is fictional and appears only in your prompt. The source of the stray content is your own example."
+    - text: "Few-shot prompting doesn't work for extraction; remove all examples."
+      correct: false
+      why: "Examples are very effective for format. The problem is this example's content. Removing examples throws away the benefit."
+    - text: "Add more Aramu examples so the model learns that Aramu is just an example."
+      correct: false
+      why: "More examples with the same content make copying more likely, not less. Vary the content across examples."
+
+- id: eng-c2-q6
+  question: "A model reply starts with \"Here is the data:\" and then wraps a valid SitRep object in a Markdown code fence labelled json. Your parser raises a JSON error. What is the best handling?"
+  options:
+    - text: "Reject it and retry. The model broke the 'JSON only' rule, so it must learn to follow it."
+      correct: false
+      why: "The content is fine, and a retry costs a call to fix something harmless. Models don't learn from your retries anyway; each call starts fresh."
+    - text: "Write a general repair routine that fixes any broken JSON: trailing commas, single quotes, missing braces."
+      correct: false
+      why: "Guessing repairs hides real errors and can change meaning. Tolerate the known, harmless wrapper; send genuinely invalid output back through the retry loop."
+    - text: "Strip the fence (and surrounding line of prose), parse what is inside, and validate it as normal."
+      correct: true
+      why: "Fences are a common, harmless habit. Tolerating them is cheap and safe, as long as the content then passes full validation."
+    - text: "Switch provider, because this model can't follow instructions."
+      correct: false
+      why: "Every provider's models do this sometimes. Handle it in the harness; use a structured-output mode if you want it gone."
+
+- id: eng-c2-q7
+  question: "SitRep figures started coming out in a different format last week. It turns out someone edited the prompt string directly on the server, and nobody can say which outputs used which wording. What practice would have prevented this?"
+  options:
+    - text: "Locking the prompt so it can never be changed."
+      correct: false
+      why: "Prompts need to improve as you find failures. The goal is controlled change, not no change."
+    - text: "Prompts as code: one template in the repository, a version bumped on every behaviour change, review plus prompt tests before release, and the version logged with every call."
+      correct: true
+      why: "Versioning and logging answer 'which prompt produced this output?'. Review and tests catch the change before it reaches production."
+    - text: "Asking the model to include its prompt in every reply."
+      correct: false
+      why: "That wastes tokens and depends on the model reporting accurately. Log the version in your own code, where it is reliable."
+    - text: "Pinning the model version, because that is what changed."
+      correct: false
+      why: "Pinning the model is good practice, but here the prompt changed. You need to track both, and the prompt is the one you control."
+
+- id: eng-c2-q8
+  question: "An Analyst step must reconcile conflicting figures and return JSON, using a standard (non-reasoning) model. Adding \"think step by step\" made it write paragraphs before the JSON, which breaks parsing. What is the best fix?"
+  options:
+    - text: "Remove the reasoning instruction. Structured output and reasoning can't be combined."
+      correct: false
+      why: "They combine well. You just need to give the reasoning a place that doesn't break parsing."
+    - text: "Keep the free text and extract the numbers from the paragraphs with regular expressions."
+      correct: false
+      why: "Parsing prose is fragile and loses the contract. Keep the reply structured."
+    - text: "Parse the reasoning as well, and publish it in the SitRep so readers can check the logic."
+      correct: false
+      why: "Reasoning is for the model (and maybe a reviewer), not the product. It can be fluent and still wrong; code should read only the answer fields."
+    - text: "Add a \"reasoning\" string as the first field of the schema (or use a reasoning model) and have code read only the answer fields."
+      correct: true
+      why: "Fields are generated in order, so a leading reasoning field lets the model think before answering inside valid JSON. A reasoning model does the thinking internally."

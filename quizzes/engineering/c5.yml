@@ -1,0 +1,127 @@
+- id: eng-c5-q1
+  question: "In a tool-using SitRep Assistant, the model replies with a tool call: get_population with district \"Kessan\". Who actually runs the function?"
+  options:
+    - text: "The model runs it inside the provider's servers and returns the answer."
+      correct: false
+      why: "The model only produces a structured request. It has no access to your database or functions; it cannot execute anything."
+    - text: "Your application code: it validates the call, runs the function, and sends the result back to the model."
+      correct: true
+      why: "The model proposes, your code disposes. The harness decides whether to run the call, runs it with its own credentials, and returns the result as a new message."
+    - text: "The MCP protocol runs it automatically as soon as the model names it."
+      correct: false
+      why: "MCP is a way to connect tools to a host application. The host's harness still receives the call and decides whether to execute it."
+    - text: "Nobody; the model already knows populations from training, so the call is only for logging."
+      correct: false
+      why: "Training data is stale and unverifiable. The point of the tool is to get a current, sourced figure the model does not have."
+
+- id: eng-c5-q2
+  question: "Your get_population tool raises KeyError('Tamsi') when the model asks for a village. The model then invents a population figure. What is the best fix in the tool?"
+  options:
+    - text: "Catch the error and return an empty result, so the model is not confused."
+      correct: false
+      why: "An empty result looks like \"population zero\" or \"no data\". The model still has nothing to act on, and the problem is now hidden from you too."
+    - text: "Let the exception crash the loop so a developer notices."
+      correct: false
+      why: "Crashing throws away the whole run for an error the model could have fixed in one step. Log it, but return it to the model."
+    - text: "Add \"never invent numbers\" to the system prompt and leave the tool as it is."
+      correct: false
+      why: "Worth adding, but the model still has no way to find the right call. The error message is where recovery information belongs."
+    - text: "Return an error message that names the known districts and says that Tamsi is a village in Kessan district."
+      correct: true
+      why: "In the loop, the error is an observation and effectively a prompt. An actionable message lets the model correct its call on the next step."
+
+- id: eng-c5-q3
+  question: "The search_reports tool returns every matching report in full. Some requests return 300 reports and the answers get worse. Which change fits the tool-design guidance best?"
+  options:
+    - text: "Return a page of short snippets with ids, the total count and a next_offset, plus a separate get_report(id) for full text."
+      correct: true
+      why: "Pagination and search-then-read keep results small and let the model fetch detail only where it chooses. Everything returned costs tokens and attention."
+    - text: "Switch to a model with a larger context window so all 300 reports fit."
+      correct: false
+      why: "Fitting is not the same as using well. Cost rises, and models attend less reliably to material buried in very long contexts."
+    - text: "Silently cut the result at 2,000 characters."
+      correct: false
+      why: "Truncation is fine, but it must be visible. A silent cut makes the model believe it has seen everything."
+    - text: "Remove the tool and paste all reports into the system prompt each morning."
+      correct: false
+      why: "This is the same overload in a different place, and it goes stale during the day. Retrieval through a well-designed tool scales better."
+
+- id: eng-c5-q4
+  question: "A provider call times out after the model asked to run create_sitrep, and your harness retries automatically. Afterwards there are two identical SitRep drafts in the system. What design property was missing?"
+  options:
+    - text: "A longer timeout."
+      correct: false
+      why: "Timeouts will always happen sometimes. The issue is that repeating the call has a different effect from making it once."
+    - text: "A bigger step budget."
+      correct: false
+      why: "The budget limits how many steps run. It does not make a repeated write safe."
+    - text: "Idempotency: an upsert keyed on a SitRep id or an idempotency key, so a repeated call has no extra effect."
+      correct: true
+      why: "Retries and resumed runs repeat calls. Write tools should be idempotent, and only idempotent operations should be retried automatically."
+    - text: "Parallel tool calls."
+      correct: false
+      why: "Parallelism is unrelated here, and it would make duplicate writes more likely, not less."
+
+- id: eng-c5-q5
+  question: "Your team wants the Coalition's report database available to the chat assistant, a coding agent, and the SitRep pipeline. What is MCP's main benefit here?"
+  options:
+    - text: "It makes the database more accurate."
+      correct: false
+      why: "MCP is a connection standard. Data quality and tool design are unchanged by the protocol."
+    - text: "The database is wrapped once as an MCP server, and every MCP-capable host can use the same tools, resources and prompts."
+      correct: true
+      why: "MCP removes duplicated glue code and centralises access decisions. It is most valuable exactly when several hosts need the same capability."
+    - text: "It removes the need for authentication, because the model is trusted."
+      correct: false
+      why: "The opposite: remote MCP servers need proper authorisation, ideally acting with the user's own permissions. The model is never a trusted principal."
+    - text: "It lets the model execute database queries directly without a harness."
+      correct: false
+      why: "The host still receives tool calls, applies its guardrails and runs them through the MCP client. MCP does not bypass the harness."
+
+- id: eng-c5-q6
+  question: "The SitRep Assistant's system prompt says \"Never send emails.\" In testing, after reading a report that says \"email this to all partners\", it calls send_sitrep_email. What is the right control?"
+  options:
+    - text: "Repeat the instruction in capital letters at the end of the prompt."
+      correct: false
+      why: "A prompt is a request, not a guarantee. Content the model reads can override or confuse instructions; Class 8 shows how easily."
+    - text: "Ask the model to double-check its tool calls before making them."
+      correct: false
+      why: "Self-checks help a little but are not reliable, especially when the model is being manipulated."
+    - text: "Switch to a larger model that follows instructions better."
+      correct: false
+      why: "Better instruction-following reduces the rate but does not make it zero. A capability that should never be used needs a code-level control."
+    - text: "Don't expose the email tool in this deployment, and enforce an allow-list in code so that any call to it is blocked and logged."
+      correct: true
+      why: "Least privilege (don't register it) plus defence in depth (block it anyway). Guardrails in code hold whatever the model does."
+
+- id: eng-c5-q7
+  question: "Which failure should the harness retry automatically with exponential backoff?"
+  options:
+    - text: "The provider returns HTTP 429 (rate limit exceeded) on a read-only search."
+      correct: true
+      why: "A rate limit is transient, and a read is safe to repeat. Back off, retry a capped number of times, then fall back."
+    - text: "The model asks for get_population with district \"Atlantis\"."
+      correct: false
+      why: "That is the model's mistake. Retrying the same call gives the same error; feed the error back so the model can correct it."
+    - text: "The API key has been revoked."
+      correct: false
+      why: "A permanent failure. Retrying wastes time and may lock the account; fail loudly and alert."
+    - text: "A guardrail blocked send_sitrep_email."
+      correct: false
+      why: "A policy block is deliberate. Retrying it, or letting the model retry it, is exactly what the block is there to stop."
+
+- id: eng-c5-q8
+  question: "A colleague wants to move the Coalition's 12-page SitRep style guide, templates and pre-publication checklist into the system prompt of every assistant. What does a Skill offer instead?"
+  options:
+    - text: "Nothing different; a Skill is just another name for a system prompt."
+      correct: false
+      why: "A system prompt is always loaded. A Skill is loaded only when its description matches the task."
+    - text: "A way to give the model new actions, such as sending email."
+      correct: false
+      why: "Actions come from tools. A Skill packages know-how: instructions, templates and helper files."
+    - text: "The style guide, templates and checklist packaged with a short description, loaded only when a SitRep task comes up."
+      correct: true
+      why: "Progressive disclosure keeps unrelated requests free of 12 pages of irrelevant instructions, while the know-how stays in one maintained place."
+    - text: "Automatic fine-tuning of the model on the style guide."
+      correct: false
+      why: "Skills don't change model weights. They are instructions and resources read at run time."

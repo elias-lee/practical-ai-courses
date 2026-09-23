@@ -1,0 +1,127 @@
+- id: eng-c3-q1
+  question: "The overnight SitRep batch job wraps every model call in a retry helper. Which failures should the helper retry, with exponential backoff?"
+  options:
+    - text: "Every error: models are non-deterministic, so any failed call might succeed next time."
+      correct: false
+      why: "Non-determinism affects the text a model writes, not whether a malformed request or a revoked key is accepted. Retrying a 400 or 401 wastes time and money and hides a bug."
+    - text: "Rate limits (429), timeouts, connection errors and 5xx server errors, but not bad requests (400), authentication errors (401/403) or content-filter refusals."
+      correct: true
+      why: "Transient errors may succeed after a wait; permanent ones fail the same way every time. Retry the first group with backoff and jitter, and let the second group surface immediately so someone fixes the cause."
+    - text: "Only timeouts. A 429 means the quota is exhausted, so the job should stop for the night."
+      correct: false
+      why: "A 429 usually means too many requests or tokens per minute, a short-term limit. Waiting a few seconds and retrying is exactly the right response."
+    - text: "None. Retries hide problems, so every error should stop the job immediately."
+      correct: false
+      why: "Rate limits and brief outages are a normal part of using a busy API. Without retries, a nightly job of 500 reports will almost certainly fail somewhere for no real reason."
+
+- id: eng-c3-q2
+  question: "A colleague refactors the SitRep chat prototype so each user message is sent in its own API call. Now the assistant has no idea what was discussed two messages ago. What is the cause?"
+  options:
+    - text: "The temperature setting resets the model's memory between calls; set it to 0."
+      correct: false
+      why: "Temperature controls how varied the output is. It has nothing to do with what the model can see."
+    - text: "The provider deletes conversations after each call for privacy; enable the provider's memory setting."
+      correct: false
+      why: "The messages API has no hidden conversation to delete. Any memory features are built on top, and the root issue is still what your code sends."
+    - text: "The context window is too small for the conversation; switch to a model with a larger window."
+      correct: false
+      why: "The previous turns are not being sent at all, so window size is irrelevant. A larger window cannot show the model text it never receives."
+    - text: "The API is stateless: the model only sees the messages sent in that call, so the code must resend the conversation history each time."
+      correct: true
+      why: "A conversation is something your code builds by resending history with every request. That is also why long conversations cost more with every turn."
+
+- id: eng-c3-q3
+  question: "During a provider outage, your code retries each call 3 times, the SDK underneath also retries 3 times, and the organization's AI gateway retries 3 times. At most, how many attempts can one SitRep request produce, and what should you do?"
+  options:
+    - text: "64 attempts (4 × 4 × 4). Choose one layer to own retries and switch retries off in the others."
+      correct: true
+      why: "Each layer makes 1 attempt plus 3 retries, and the layers multiply. Stacked retries turn an outage into a flood of requests and a long hang; one layer should own the retry policy."
+    - text: "9 attempts (3 × 3)."
+      correct: false
+      why: "This counts 3 attempts per layer and only two layers. With three layers each making 1 + 3 = 4 attempts, the worst case is 4 × 4 × 4 = 64."
+    - text: "3 attempts: the layers share one retry counter."
+      correct: false
+      why: "The layers don't know about each other. Each one retries independently whatever it sees failing underneath it."
+    - text: "10 attempts (1 + 3 + 3 + 3): the retries add up."
+      correct: false
+      why: "Retries nest, so they multiply rather than add: every attempt by an outer layer triggers a full set of retries in the layer below."
+
+- id: eng-c3-q4
+  question: "One summary uses 2,000 input tokens and 500 output tokens. The model costs USD 0.15 per million input tokens and USD 0.60 per million output tokens. What does the call cost?"
+  options:
+    - text: "USD 0.000375"
+      correct: false
+      why: "That prices all 2,500 tokens at the input rate. Output tokens are priced separately, here four times higher."
+    - text: "USD 0.001275"
+      correct: false
+      why: "That swaps the prices, charging the 2,000 input tokens at the output rate. Input: 2,000 × 0.15 / 1,000,000 = 0.0003; output: 500 × 0.60 / 1,000,000 = 0.0003."
+    - text: "USD 0.0006"
+      correct: true
+      why: "0.0003 for input plus 0.0003 for output. Output was only a fifth of the tokens but half the cost, which is why a verbose model or a missing length limit shows up on the bill."
+    - text: "USD 0.0015"
+      correct: false
+      why: "That prices all 2,500 tokens at the output rate. Input tokens are cheaper and must be priced separately."
+
+- id: eng-c3-q5
+  question: "You ask a coding agent to implement requirement R9 in the SitRep app. It reports: \"All tests pass.\" In the diff you see it changed an existing assertion from == 4 to >= 1. What should you do?"
+  options:
+    - text: "Accept it: the tests pass, and the agent had context you don't."
+      correct: false
+      why: "The tests are the contract. An agent that loosens them has changed the definition of done, which is your decision, not the agent's."
+    - text: "Reject the change, restore the test, and tell the agent that existing tests may not be modified without approval. Review test-file diffs first from now on."
+      correct: true
+      why: "Weakening assertions to make tests pass is a known coding-agent failure. Guard the contract explicitly in your instructions and check test changes before anything else."
+    - text: "Ask the agent to confirm that its change is correct."
+      correct: false
+      why: "The agent will usually explain its change confidently. Its self-report is not a review; you need to judge the change against the spec yourself."
+    - text: "Delete the test: if it needed changing, it was probably flaky."
+      correct: false
+      why: "Removing the check makes the problem invisible instead of fixing it. The original assertion encoded a requirement; find out why the new code breaks it."
+
+- id: eng-c3-q6
+  question: "While adding retries, your coding assistant adds 'pip install litellm-retry-helper' to the setup instructions. Nobody on the team has heard of the package. What is the right response?"
+  options:
+    - text: "Check that the package really exists and who maintains it, and whether you need it at all (the retry logic is about 20 lines). Only add it if it passes, pinned to an exact version."
+      correct: true
+      why: "Models sometimes invent plausible package names, and attackers register such names with malicious code (slopsquatting). Every new dependency is a supply-chain decision that you have to review."
+    - text: "Install it: the assistant was trained on a huge amount of code, so it knows which packages exist."
+      correct: false
+      why: "Assistants regularly suggest packages that don't exist or are unmaintained. Training data is no guarantee that a name is real or safe today."
+    - text: "Install the latest version without pinning, so you always get security fixes."
+      correct: false
+      why: "Unpinned dependencies change underneath you, including to compromised versions. Pin exact versions and upgrade on purpose, with tests."
+    - text: "Ask the assistant whether the package is safe, and install it if it says yes."
+      correct: false
+      why: "The same model that invented the name will often vouch for it. Check the package index, the maintainer and its usage yourself."
+
+- id: eng-c3-q7
+  question: "In which of these situations is \"vibe coding\" (accepting AI-generated code because it seems to work, without close review) acceptable?"
+  options:
+    - text: "A tool colleagues will use every day to total displacement figures for the SitRep."
+      correct: false
+      why: "Other people will rely on behaviour nobody specified or reviewed, and its numbers feed official reports. This needs a spec, tests and review."
+    - text: "A script that automatically emails the finished SitRep to partner agencies each morning."
+      correct: false
+      why: "An unattended, externally visible, hard-to-reverse action is the opposite of low stakes. A silent bug here reaches partners before anyone notices."
+    - text: "A small script that processes staff contact lists: it's only 40 lines, so review isn't worth it."
+      correct: false
+      why: "Size is not the criterion. Personal data raises the stakes, and privacy failures are invisible in a quick demo."
+    - text: "A throwaway prototype, on fictional data, to show a manager what a SitRep dashboard could look like."
+      correct: true
+      why: "Nothing depends on it and it touches no real data. Explore quickly, then write a spec and rebuild properly if the idea is approved."
+
+- id: eng-c3-q8
+  question: "A teammate notices an API key hard-coded in app.py, which has already been pushed to the team's shared repository. What should happen first?"
+  options:
+    - text: "Push a new commit that removes the key; the problem is then solved."
+      correct: false
+      why: "The key stays in git history, and in every clone, fork and cache. Removing it from the latest version does not make it secret again."
+    - text: "Make the repository private."
+      correct: false
+      why: "Everyone who already had access, and every existing copy, still has the key. Access control does not undo exposure."
+    - text: "Revoke and rotate the key immediately, then move it to an environment variable (with .env in .gitignore) and add secret scanning."
+      correct: true
+      why: "Once a key has been exposed, assume it is compromised: rotation is the only fix. Then fix the hygiene that allowed it so it doesn't happen again."
+    - text: "Nothing, as long as the repository is internal to the organization."
+      correct: false
+      why: "Internal repositories are read by many people and tools, and are sometimes mirrored or leaked. A key in a repository is a leaked key."

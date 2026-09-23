@@ -1,0 +1,127 @@
+- id: eng-c6-q1
+  question: "Every morning the SitRep team runs the same four steps on new field reports: extract facts, compute totals, draft, review. A colleague proposes replacing the script with an autonomous agent \"so it's smarter\". What is the best response?"
+  options:
+    - text: "Agree — agents are more capable than workflows, so quality will improve."
+      correct: false
+      why: "Autonomy is a cost, not a feature. When the steps are known and fixed, an agent adds unpredictability, cost and testing difficulty without solving any named problem."
+    - text: "Keep it as a workflow (prompt chain with gates); add an agentic step only for a part whose path genuinely can't be predicted."
+      correct: true
+      why: "The steps can be written down in advance and never change — the textbook case for a workflow. Reserve agency for open-ended sub-tasks such as investigating a data conflict."
+    - text: "Replace it with a multi-agent swarm so each step can hand off to any other."
+      correct: false
+      why: "Handoffs make control flow harder to predict and bound. A fixed four-step process gains nothing from agents choosing whom to pass control to."
+    - text: "Keep the script but let the model decide how many review rounds to run, with no limit."
+      correct: false
+      why: "The model does not reliably stop on its own. Review rounds need a hard budget enforced in code."
+
+- id: eng-c6-q2
+  question: "Your SitRep pipeline has 10 sequential agent steps, each correct 95% of the time (errors independent). Roughly how often is the whole run correct, and what does that imply?"
+  options:
+    - text: "About 95% — the pipeline is as good as its average step."
+      correct: false
+      why: "Probabilities of independent steps multiply: 0.95^10 ≈ 0.60. A chain is weaker than its average link."
+    - text: "About 60% — so add validation gates and a reviewer, and don't add steps without a measured reason."
+      correct: true
+      why: "0.95^10 ≈ 0.60. Errors compound across steps; gates and checks break the compounding, and every extra agent is another factor below 1."
+    - text: "Above 95% — more specialised agents means more accuracy."
+      correct: false
+      why: "More agents means more steps, and each step is another chance to fail. Specialisation helps only if it improves each step enough to outweigh the extra hops."
+    - text: "It can't be estimated; LLM errors don't combine."
+      correct: false
+      why: "They do. Independence is a simplification, but the direction is right: longer chains fail more often unless you add checks."
+
+- id: eng-c6-q3
+  question: "During a demo, a Researcher agent searching reports for Bara village keeps calling `search_reports` with slightly different queries. After 200 calls it is still going. What is the root-cause fix?"
+  options:
+    - text: "Add \"Stop when you have enough information\" to the system prompt."
+      correct: false
+      why: "Helpful, but a prompt is a request, not a guarantee. The model will not reliably stop on its own; the limit must be enforced in code."
+    - text: "Switch to a model with a bigger context window so it can see all its previous searches."
+      correct: false
+      why: "A bigger window lets the loop run longer before it breaks; it doesn't stop it. Context size is not a stop rule."
+    - text: "Enforce a step budget (and a cost ceiling) in the loop's code, and return a flagged \"incomplete\" result when it's hit."
+      correct: true
+      why: "Budgets and stop rules belong to the orchestration layer, in code. Hitting the budget is a distinct, recorded outcome that downstream code and humans can act on."
+    - text: "Wrap the tool call in a retry loop so failed searches are repeated automatically."
+      correct: false
+      why: "The tool isn't failing — the loop is unbounded. Adding retries makes an unbounded loop worse."
+
+- id: eng-c6-q4
+  question: "Today's reports cover flooding in two districts plus a cholera alert; tomorrow's may cover a single landslide. You want a model to decide which sub-tasks are needed, delegate them, and combine the results. Which pattern fits best?"
+  options:
+    - text: "Prompt chaining"
+      correct: false
+      why: "Chaining uses a fixed sequence decided in advance. Here the sub-tasks change with every input."
+    - text: "Parallelization (sectioning)"
+      correct: false
+      why: "Sectioning runs sub-tasks you define in code ahead of time. The key feature here is that the sub-tasks are not known in advance."
+    - text: "Orchestrator-workers"
+      correct: true
+      why: "A central model plans sub-tasks at run time from the input, delegates them to workers, and synthesises results — exactly when the decomposition varies per input."
+    - text: "Evaluator-optimizer"
+      correct: false
+      why: "Evaluator-optimizer iterates on one output against criteria. It doesn't decompose a request into varying sub-tasks."
+
+- id: eng-c6-q5
+  question: "In a supervisor design, the Researcher, Analyst and Writer each receive the full transcript of every previous agent's conversation, \"so nobody misses anything\". Costs are high and the Writer sometimes quotes the Researcher's discarded guesses. What should you change?"
+  options:
+    - text: "Move to a model with a larger context window so everything fits comfortably."
+      correct: false
+      why: "A bigger window does not fix coordination: the Writer would still see discarded guesses, and cost grows with every hop. It lets you make the same mistake at a larger scale."
+    - text: "Have each agent return a compact, schema-validated result, and pass each agent only the outputs it depends on."
+      correct: true
+      why: "Pass summaries, not transcripts. Context isolation is the main benefit of multiple agents; validated handoff contracts stop one agent's noise becoming the next agent's facts."
+    - text: "Merge all agents into one agent with one very long prompt."
+      correct: false
+      why: "This keeps the giant shared context and loses the focused instructions. It may be right for a simple task, but it doesn't address the handoff problem."
+    - text: "Add a fourth agent to summarise the transcripts before the Writer sees them."
+      correct: false
+      why: "Adding an agent adds a step, cost and another error source. Fix the handoff contract at the source rather than patching it downstream."
+
+- id: eng-c6-q6
+  question: "The orchestrator's plan returns a step assigned to agent \"Translator\", which doesn't exist in your system. What should the orchestration layer do?"
+  options:
+    - text: "Execute the plan and let the unknown step fail at run time."
+      correct: false
+      why: "Earlier steps would run (and cost money) before the failure, and the partial result may be mistaken for a complete one. Validate before executing."
+    - text: "Silently drop the unknown step and run the rest."
+      correct: false
+      why: "Steps that depend on it would receive missing input, and nobody would know part of the request was ignored. Fail loudly."
+    - text: "Trust the model — it probably knows an agent you forgot to register."
+      correct: false
+      why: "The model's plan is a proposal, like user input. Only agents your code actually has can run."
+    - text: "Reject the plan with a PlanError before anything runs (optionally retry once, feeding the error back to the planner)."
+      correct: true
+      why: "The model proposes, code disposes: validate agents, ids, dependencies, cycles and size before execution, and fail loudly if the plan is unsafe."
+
+- id: eng-c6-q7
+  question: "Where should a human approval gate go in the SitRep pipeline?"
+  options:
+    - text: "After every agent step, so a person checks all intermediate work."
+      correct: false
+      why: "Gating everything causes approval fatigue: people click \"approve\" without reading, which is worse than no gate. Gate what matters."
+    - text: "Before irreversible or high-stakes actions — e.g. before publishing the SitRep or committing figures that drive allocations — showing the human exactly the decision."
+      correct: true
+      why: "Gates belong in front of actions that are irreversible, externally visible or high-stakes, and should present the specific decision, not the whole transcript."
+    - text: "Nowhere — the Reviewer agent already approves the draft."
+      correct: false
+      why: "An LLM reviewer improves drafts but is not accountable. High-stakes, externally visible actions still need a named human."
+    - text: "Only when the model says it is unsure."
+      correct: false
+      why: "Models are poorly calibrated about their own uncertainty. Gates should be placed by the design, not triggered by the model's self-report."
+
+- id: eng-c6-q8
+  question: "Your orchestrator needs to (a) query the Veloria Relief Coalition's report database, and (b) ask a partner agency's logistics agent — run by another organisation — for road-access status. Which protocols fit?"
+  options:
+    - text: "MCP for both — every external capability is a tool."
+      correct: false
+      why: "MCP fits tools and data you call directly. A partner's autonomous agent with its own prompts and tools is better reached as a peer you delegate to, which is what A2A is for."
+    - text: "A2A for both — the database is also a kind of agent."
+      correct: false
+      why: "A database has no goals or reasoning of its own; wrapping it as an agent adds latency and indirection. Expose it as an MCP server."
+    - text: "MCP for the report database (a tool/data source); A2A for the partner's logistics agent (delegating a task to another agent)."
+      correct: true
+      why: "MCP connects an agent to tools and data; A2A connects an agent to another agent, whose internals it neither sees nor controls."
+    - text: "Neither — use a larger context window and paste in the database and the partner's reports."
+      correct: false
+      why: "Context size doesn't give you live data or another organisation's capabilities. You need a protocol to reach them at run time."

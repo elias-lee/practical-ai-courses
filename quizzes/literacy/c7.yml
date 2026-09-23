@@ -1,0 +1,180 @@
+- id: lit-c7-q1
+  question: >-
+    Which description best captures the difference between a chat assistant and an AI agent?
+  options:
+    - text: "An agent uses a bigger, smarter model than a chat assistant."
+      correct: false
+      why: >-
+        Agents and chat assistants can use exactly the same model. The difference is in how the
+        model is used: once, or in a loop with tools.
+    - text: "An agent is a chatbot with a name and personality, such as \"SitRep Helper\"."
+      correct: false
+      why: >-
+        A name or persona is just branding. A named chatbot that answers once is still a chat
+        assistant.
+    - text: "An agent works in a loop: it decides an action, uses a tool, looks at the result and repeats until done or stopped."
+      correct: true
+      why: >-
+        Correct. A chat assistant answers; an agent acts, checks and continues. The loop and the
+        tools are what make it an agent.
+    - text: "An agent never needs human involvement, while a chat assistant always does."
+      correct: false
+      why: >-
+        Well-designed agents include human approval points for important actions. Being able to
+        act on its own doesn't mean it should act without oversight.
+
+- id: lit-c7-q2
+  question: >-
+    Every week, the SitRep follows the same steps: collect notes from one folder, extract figures,
+    draft in the template, human review, send. A colleague proposes "a fully autonomous agent".
+    What is the best response?
+  options:
+    - text: "A fixed workflow is probably better here: the steps are known, and it's more predictable, cheaper and easier to test."
+      correct: true
+      why: >-
+        Correct. When the steps are the same every time, let the design fix them. Start with the
+        simplest thing that works, and add agent-style freedom only where the task needs it.
+    - text: "Agree: agents are the newest technology, so they will always give better results."
+      correct: false
+      why: >-
+        Newer isn't automatically better. Agents are less predictable, harder to test and usually
+        more expensive. For a task with fixed steps, that flexibility buys little.
+    - text: "Agree, as long as the agent uses the most expensive model available."
+      correct: false
+      why: >-
+        A stronger model doesn't fix a design mismatch. The question is whether the task needs the
+        AI to choose its own steps, and here it doesn't.
+    - text: "Reject AI entirely: automation can't be used for SitReps."
+      correct: false
+      why: >-
+        AI can help a lot with SitReps, with a workflow, checking and a human approval point. The
+        choice isn't all-or-nothing.
+
+- id: lit-c7-q3
+  question: >-
+    An agent reports "Task complete: SitRep sent to the country director." You find it actually
+    emailed an unreviewed draft. Which design element was most clearly missing?
+  options:
+    - text: "A more detailed system prompt telling it to be careful."
+      correct: false
+      why: >-
+        Better instructions help, but instructions alone are not a control. Agents can misread
+        or ignore them. The safeguard for an irreversible action is a required approval step.
+    - text: "A bigger budget, so it had time to double-check."
+      correct: false
+      why: >-
+        More steps wouldn't have stopped it sending. Budgets limit runaway work; they don't decide
+        which actions need a person's yes.
+    - text: "A multi-agent design with a separate Writer agent."
+      correct: false
+      why: >-
+        Splitting the work among more agents doesn't help if any of them can send without approval.
+        It could even add another hand-off where things go wrong.
+    - text: "A human approval point before sending, ideally with the agent able to draft but not send."
+      correct: true
+      why: >-
+        Correct. Sending is external and irreversible, so it needs a named person's approval. The
+        safest design removes the "send" permission from the agent altogether.
+
+- id: lit-c7-q4
+  question: >-
+    IT offers to "connect the AI assistant to the shared drive using MCP". What is the most
+    important question to ask first?
+  options:
+    - text: "\"Which AI model will it use?\""
+      correct: false
+      why: >-
+        The model matters, but it doesn't determine what the connection can reach or change. The
+        risk sits in the permissions.
+    - text: "\"What will it be able to read, and what will it be able to change or send?\""
+      correct: true
+      why: >-
+        Correct. A connection's permissions are its risks. Read-only access to one folder is very
+        different from edit access to the whole drive. If the answer is "everything", push back.
+    - text: "\"Is MCP an open standard?\""
+      correct: false
+      why: >-
+        It is, but being a standard says nothing about what this particular connection allows. A
+        standard connector can still be given far too much access.
+    - text: "\"Will it make the assistant faster?\""
+      correct: false
+      why: >-
+        Speed is a minor concern next to what the assistant can see and do in your organization's
+        systems once connected.
+
+- id: lit-c7-q5
+  question: >-
+    A team designs a multi-agent SitRep system with nine agents, each doing one tiny step. What
+    is the main concern?
+  options:
+    - text: "None: more specialized agents always produce better results."
+      correct: false
+      why: >-
+        Specialization helps only when parts genuinely need different instructions, tools or
+        information. Beyond that, extra agents add cost and hand-offs without adding quality.
+    - text: "Nine agents will be too slow to type."
+      correct: false
+      why: >-
+        Speed matters a little, but the bigger issue is that errors and lost information can pass
+        along and grow at every hand-off.
+    - text: "Each hand-off can lose information and pass errors along, and cost grows with every agent."
+      correct: true
+      why: >-
+        Correct. Errors compound across steps and hand-offs. Use several agents only when the job
+        really splits into distinct parts; otherwise a simpler design is more reliable.
+    - text: "Multi-agent systems can't have a human in the loop."
+      correct: false
+      why: >-
+        They can and should. The coordinator can pause for human approval at defined points just
+        as a single agent can.
+
+- id: lit-c7-q6
+  question: >-
+    Your draft spec's success criteria say: "The system should produce high-quality, accurate
+    SitReps." What's the best improvement?
+  options:
+    - text: "Add \"very\": \"very high-quality, very accurate SitReps\"."
+      correct: false
+      why: >-
+        Stronger adjectives are still unmeasurable. Nobody can test "very accurate" any better than
+        "accurate".
+    - text: "Leave it: the builders will know what quality means."
+      correct: false
+      why: >-
+        Builders don't know your standards unless you state them. Leaving it vague lets them
+        define success, and you may disagree when the system arrives.
+    - text: "Replace it with the name of the AI model to use."
+      correct: false
+      why: >-
+        Choosing a model is a design decision, not a success criterion. It says nothing about how
+        you'll know the system works.
+    - text: "Make it measurable, e.g. \"Every figure traceable to a source note; unreached villages listed as gaps; reviewers accept 8 of 10 drafts with minor edits.\""
+      correct: true
+      why: >-
+        Correct. Measurable criteria let everyone agree on whether the system works, and they turn
+        directly into test cases.
+
+- id: lit-c7-q7
+  question: >-
+    Which is the most useful test case to include in the SitRep Assistant spec?
+  options:
+    - text: "A clean, complete field note, where a correct SitRep simply reports all the figures."
+      correct: false
+      why: >-
+        Worth including, but it's the easiest case. Systems usually fail on awkward inputs, and a
+        spec with only easy tests lets a weak system pass.
+    - text: "A field note with a beneficiary's name and phone number, where the correct output contains neither."
+      correct: true
+      why: >-
+        Correct. It's realistic, awkward and high-stakes, and it says exactly what "correct" looks
+        like. Good test cases come from the checks a careful human would make.
+    - text: "\"The system should handle difficult notes well.\""
+      correct: false
+      why: >-
+        That's a hope, not a test case. A test case needs a specific input and a description of
+        the correct result that two people would agree on.
+    - text: "A request for the system to write a poem about floods, to test creativity."
+      correct: false
+      why: >-
+        This isn't something the system is for. Test cases should reflect the real inputs and risks
+        of the job.

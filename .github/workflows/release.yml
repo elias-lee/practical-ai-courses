@@ -1,0 +1,43 @@
+name: Release
+
+# Push a tag like v0.2.0 to publish learner and instructor zips as a GitHub Release.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: pytest tests -q
+      - run: bash scripts/test_labs.sh
+      - name: Build both editions
+        run: |
+          mkdocs build --strict -f mkdocs.yml
+          mkdocs build --strict -f mkdocs.instructor.yml
+      - name: Package zips (site + lab code)
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          for EDITION in learner instructor; do
+            SRC=site; [ "$EDITION" = instructor ] && SRC=site-instructor
+            DIR="ai-courses-${EDITION}-${TAG}"
+            mkdir -p "dist/${DIR}"
+            cp -r "${SRC}/." "dist/${DIR}/"
+            rsync -a --exclude '__pycache__' --exclude '.pytest_cache' labs "dist/${DIR}/"
+            (cd dist && zip -qr "${DIR}.zip" "${DIR}")
+          done
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/*.zip \
+            --title "AI Courses ${GITHUB_REF_NAME}" \
+            --notes "Download **ai-courses-learner-${GITHUB_REF_NAME}.zip**, unzip it, and open \`index.html\` in your browser. No internet or installation needed. The instructor zip adds facilitation guides and quiz answer rationale — share it with facilitators only."

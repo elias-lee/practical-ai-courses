@@ -1,0 +1,184 @@
+- id: lit-c2-q1
+  question: >-
+    At its core, what does a large language model do when it writes an answer?
+  options:
+    - text: "It searches a database of verified facts and copies out the matching entry."
+      correct: false
+      why: >-
+        There is no built-in database of verified facts. Some tools add a search or document
+        step, but the model itself generates text by prediction.
+    - text: "It plans the whole answer in advance, then types it out."
+      correct: false
+      why: >-
+        It produces text one token at a time, each prediction depending on everything before it.
+        There is no finished plan it is copying from.
+    - text: "It predicts the most plausible next token, adds it to the text, and repeats."
+      correct: true
+      why: >-
+        Correct. Everything a chatbot does comes from repeated next-token prediction, based on
+        patterns learned in training and the text in front of it.
+    - text: "It understands the question the way a person does and looks up the answer in its memory."
+      correct: false
+      why: >-
+        Prediction at this scale can look like understanding, but the model has no neat memory
+        of facts to look up. Its "memory" is a blur of patterns spread across billions of
+        parameters.
+
+- id: lit-c2-q2
+  question: >-
+    You ask a chat tool for the population of Aramu district (a fictional place) and it gives a
+    precise figure. Why did this happen?
+  options:
+    - text: "It predicts plausible text, and a number is the plausible continuation; it has no built-in way to check whether the number is true."
+      correct: true
+      why: >-
+        Correct. This is a hallucination. The model fills the gap with something that sounds
+        right, and training rewarded confident answers more than "I don't know".
+    - text: "It is lying on purpose to seem more helpful."
+      correct: false
+      why: >-
+        Lying implies knowing the truth and hiding it. The model doesn't know the figure; it
+        produces a plausible-sounding one. The effect is the same, which is why you must verify.
+    - text: "It found an outdated census online."
+      correct: false
+      why: >-
+        There is no census for a fictional district, and without search switched on the tool
+        isn't looking anything up. The figure was generated, not found.
+    - text: "It confused Aramu with a real district of the same name, so the number is probably close."
+      correct: false
+      why: >-
+        Even if a similar name exists somewhere, the figure has no reliable connection to your
+        situation. Treat any figure you didn't supply as unverified.
+
+- id: lit-c2-q3
+  question: >-
+    You send the same SitRep headline prompt in two new chats and get two different headlines.
+    What is the best explanation?
+  options:
+    - text: "The model learned from the first chat and improved its answer."
+      correct: false
+      why: >-
+        Models don't learn from your chats as you use them, and a new chat can't see the old one.
+        The difference comes from how each answer is generated.
+    - text: "The tool is faulty; a working computer always gives the same output."
+      correct: false
+      why: >-
+        That's true of normal programs, but chat tools deliberately include some randomness.
+        Variation is expected behaviour, not a fault.
+    - text: "The provider updated the model between your two messages."
+      correct: false
+      why: >-
+        Model updates do happen, but not between two messages a minute apart. Variation happens
+        on every run, even with the same model.
+    - text: "At each step the model picks the next token with some randomness (controlled by temperature), so the answers diverge."
+      correct: true
+      why: >-
+        Correct. The model usually picks a likely token but not always the top one, like rolling
+        weighted dice. One different early word sends the rest of the answer in a new direction.
+
+- id: lit-c2-q4
+  question: >-
+    Yesterday you corrected the chatbot: "Our reports say households, not families." Today, in
+    a new chat, it says "families" again. Why?
+  options:
+    - text: "It is ignoring you because the correction wasn't polite enough."
+      correct: false
+      why: >-
+        Politeness has nothing to do with it. The new chat simply doesn't contain your
+        correction.
+    - text: "The model's training happened before release; your correction only applied inside yesterday's conversation."
+      correct: true
+      why: >-
+        Correct. The model doesn't retrain from your chats. A correction affects only the
+        conversation it's in (unless your tool has a memory or custom-instructions feature
+        switched on). Put standing rules in a template or custom instructions.
+    - text: "It needs several days to absorb corrections into its training."
+      correct: false
+      why: >-
+        Your chats don't feed into the model's training as you use it. Training happens in large
+        batches before a model is released.
+    - text: "It remembered the correction but decided it was wrong."
+      correct: false
+      why: >-
+        The new chat can't see yesterday's conversation at all, so there is nothing for it to
+        remember or reject.
+
+- id: lit-c2-q5
+  question: >-
+    In a very long chat, the AI stops following an instruction you gave at the start ("mark
+    every estimate with ~"). What is the most likely reason?
+  options:
+    - text: "The AI got tired after so many messages."
+      correct: false
+      why: >-
+        Models don't get tired. The effect comes from how much text the model can see and pay
+        attention to at once.
+    - text: "The instruction was automatically cancelled after one hour."
+      correct: false
+      why: >-
+        There is no timer on instructions. What matters is whether the instruction is still in
+        the context and how prominent it is.
+    - text: "It has decided it knows better than you."
+      correct: false
+      why: >-
+        The model doesn't make decisions about your authority. Instructions fade for mechanical
+        reasons: context limits and uneven attention across long texts.
+    - text: "The context window filled up, so early messages were dropped or summarized, or the instruction got lost in a long context."
+      correct: true
+      why: >-
+        Correct. The model can only use what is on its "desk". In long conversations early
+        messages may fall off or get less attention. Restate key instructions, or start a new
+        chat with an improved prompt.
+
+- id: lit-c2-q6
+  question: >-
+    Your team processes the same SitRep in English and in Arabic. The Arabic version uses more of
+    the tool's budget. Why?
+  options:
+    - text: "The tokenizer was built mostly from English-heavy text, so the same content is split into more tokens in Arabic, and cost is counted in tokens."
+      correct: true
+      why: >-
+        Correct. Common English words are often single tokens, while words in other scripts are
+        often split into more pieces. More tokens means more cost and less room in the context
+        window.
+    - text: "Providers charge extra for every language other than English as a policy."
+      correct: false
+      why: >-
+        Pricing is usually per token, the same rate for any language. The difference comes from
+        how many tokens the same content needs.
+    - text: "Arabic reports are always longer than English ones."
+      correct: false
+      why: >-
+        The content was the same. The extra cost comes from how the text is split into tokens,
+        not from a longer report.
+    - text: "Models translate everything into English first, which doubles the cost."
+      correct: false
+      why: >-
+        Models work with text in many languages directly; they don't translate everything to
+        English first. The difference is in tokenization.
+
+- id: lit-c2-q7
+  question: >-
+    Your office wants to use AI on sensitive beneficiary data, which must not leave the
+    organization's own infrastructure. Which kind of model fits best?
+  options:
+    - text: "The largest model available, because bigger models are safer with data."
+      correct: false
+      why: >-
+        Size affects capability and cost, not where data is processed. A large model in someone
+        else's data centre still sends your data outside.
+    - text: "A reasoning model, because thinking before answering protects the data."
+      correct: false
+      why: >-
+        Reasoning improves some answers but says nothing about where data goes. Data protection
+        depends on where the model runs and under what agreement.
+    - text: "An approved open-weight model run on the organization's own servers."
+      correct: true
+      why: >-
+        Correct. Open-weight models can be downloaded and run inside your own infrastructure, so
+        the data need not leave. It still needs approval, security and testing for the task.
+    - text: "Any closed model, because closed means the data is kept closed."
+      correct: false
+      why: >-
+        "Closed" refers to the model's weights not being published, not to your data. Closed
+        models run on the provider's service, so your data is sent to them under their terms.

@@ -1,0 +1,188 @@
+- id: lit-c1-q1
+  question: >-
+    A colleague says: "Generative AI, machine learning and AI are just three names for the same
+    thing." Which statement is accurate?
+  options:
+    - text: "They are the same thing; the names changed as the technology became popular."
+      correct: false
+      why: >-
+        The terms are nested, not interchangeable. AI is the whole field, machine learning is one
+        branch of it, and generative AI is a smaller part of machine learning. Using them as
+        synonyms hides important differences in how systems fail.
+    - text: "Generative AI is a kind of machine learning, which is a kind of AI, but most AI and most machine learning is not generative."
+      correct: true
+      why: >-
+        Correct. The family tree is AI, then machine learning, then deep learning, then
+        generative AI, each inside the one before. A spam filter or a flood-mapping model is
+        machine learning but does not generate new content.
+    - text: "Machine learning is the newest and most advanced of the three, so it contains the others."
+      correct: false
+      why: >-
+        This reverses the nesting. Machine learning dates back decades and is the wider group;
+        generative AI is a more recent, narrower part of it.
+    - text: "AI means rules written by programmers; machine learning and generative AI are separate fields outside AI."
+      correct: false
+      why: >-
+        Early AI did rely heavily on hand-written rules (expert systems), but machine learning
+        and generative AI are branches of AI, not separate fields.
+
+- id: lit-c1-q2
+  question: >-
+    Your office trained a model on 5,000 past field notes that officers had marked "urgent" or
+    "not urgent". It works well, except that it rarely flags notes from one remote district as
+    urgent. What is the most likely explanation?
+  options:
+    - text: "Someone wrote a rule telling it to ignore that district."
+      correct: false
+      why: >-
+        In machine learning nobody writes the rules; the model learns patterns from examples.
+        Looking for a faulty rule is the right instinct for a normal program, but not here.
+    - text: "The model is broken and should be restarted."
+      correct: false
+      why: >-
+        Restarting a trained model changes nothing about what it learned. The behaviour comes
+        from its training data, so the fix is better data, checks or both.
+    - text: "The district is too far away for the model to process."
+      correct: false
+      why: >-
+        Distance means nothing to a model; it only sees the text of each note. The pattern must
+        come from the examples it was trained on.
+    - text: "The past examples under-rated or rarely included that district, and the model learned that pattern."
+      correct: true
+      why: >-
+        Correct. A model is only as good as its examples. If past officers marked notes from that
+        district as less urgent, or there were few of them, the model copies that gap or bias.
+        This is why learned systems need testing on the cases that matter.
+
+- id: lit-c1-q3
+  question: >-
+    AI research began in the 1950s, yet most of today's tools appeared after 2012. What mainly
+    explains the speed-up?
+  options:
+    - text: "Much more data, much faster computing chips, and better designs such as the 2017 transformer, arriving together."
+      correct: true
+      why: >-
+        Correct. The internet supplied huge amounts of text and images, chips built for video
+        games proved ideal for training neural networks, and the transformer design made large
+        language models practical.
+    - text: "Around 2012 computers became conscious and started improving themselves."
+      correct: false
+      why: >-
+        Nothing of the sort happened. The progress came from engineering at scale: more data,
+        more computing power and better designs. Talk of machines "waking up" is hype.
+    - text: "ChatGPT invented artificial intelligence in 2022."
+      correct: false
+      why: >-
+        ChatGPT brought generative AI to the general public, but it built on about 70 years of
+        research, including machine learning, deep learning and the transformer.
+    - text: "Programmers finally finished writing all the rules needed for intelligence."
+      correct: false
+      why: >-
+        That was the expert-systems approach of the 1970s and 1980s, and it proved brittle.
+        The breakthrough came from learning patterns from data instead of writing rules.
+
+- id: lit-c1-q4
+  question: >-
+    Which of these SitRep tasks best plays to the strengths of a generative AI chat tool?
+  options:
+    - text: "Stating the census population of Aramu district from memory."
+      correct: false
+      why: >-
+        Recalling specific facts from memory is a weakness. The model produces plausible text,
+        and for a fictional or little-documented place it will simply invent a figure.
+    - text: "Adding up displaced households from 40 village reports, exactly."
+      correct: false
+      why: >-
+        Exact arithmetic over long lists is a job for a normal program such as a spreadsheet.
+        Chat tools can get sums wrong while sounding certain.
+    - text: "Turning pasted field notes into a structured, five-heading summary."
+      correct: true
+      why: >-
+        Correct. You supply the material and the AI transforms it: summarizing and restructuring
+        text it can see is a core strength. You still check the figures against the notes.
+    - text: "Deciding whether to mention a sensitive security incident in the report."
+      correct: false
+      why: >-
+        This needs judgement, local knowledge and accountability. The AI might help list
+        considerations, but the decision belongs to a person.
+
+- id: lit-c1-q5
+  question: >-
+    A vendor says their AI "writes 100% accurate situation reports with no need for human
+    review". What is the most useful response?
+  options:
+    - text: "Accept it; AI tools from large companies are thoroughly tested."
+      correct: false
+      why: >-
+        Even well-tested generative AI makes mistakes, including invented figures. A claim of
+        100% accuracy with no human review should raise questions, whoever makes it.
+    - text: "Ask how it was tested on data like ours, how often it is wrong, how errors are caught, and who is accountable for them."
+      correct: true
+      why: >-
+        Correct. These questions separate real performance from marketing: tested on what,
+        how often wrong, how you find out, and who owns the output. No generative AI is 100%
+        accurate.
+    - text: "Reject it; AI is just autocomplete and can't do anything useful."
+      correct: false
+      why: >-
+        This is hype in the opposite direction. Generative AI can speed up real parts of the
+        SitRep process; the problem is the claim of perfection, not the tool itself.
+    - text: "Accept it if the demonstration output is well written and professional."
+      correct: false
+      why: >-
+        Fluent is not the same as true. A polished demo tells you nothing about whether the
+        figures are right, especially on your own messy data.
+
+- id: lit-c1-q6
+  question: >-
+    You have broken the SitRep process into steps. Which is the best choice for the step "add
+    up the displaced households reported by each team"?
+  options:
+    - text: "Generative AI, because it is the most advanced technology available."
+      correct: false
+      why: >-
+        Most advanced is not the same as best suited. Exact arithmetic is a known weak spot for
+        chat tools working "in their head".
+    - text: "A human, because computers can't be trusted with numbers."
+      correct: false
+      why: >-
+        Normal programs are extremely reliable with numbers. A person should decide how to
+        handle overlaps and estimates, but the adding itself is ideal for a spreadsheet.
+    - text: "Skip the step; the director only needs a rough idea."
+      correct: false
+      why: >-
+        Totals drive decisions about aid, so they matter. The right move is to assign the step
+        to the right worker, not to drop it.
+    - text: "A normal program, such as a spreadsheet, with a person checking overlaps and estimates."
+      correct: true
+      why: >-
+        Correct. Exact rules and calculations suit ordinary programs: predictable, cheap and
+        exact. A person still decides what to do about villages counted twice or figures that
+        are only estimates.
+
+- id: lit-c1-q7
+  question: >-
+    Without giving it any notes, you ask a chat tool to "write a SitRep on the Aramu floods". It
+    returns a polished report with population figures, agency names and dates. What should you
+    conclude?
+  options:
+    - text: "The specific details are very likely invented. Fluent writing is no evidence of accuracy."
+      correct: true
+      why: >-
+        Correct. With no source material, the model can only produce plausible text, and Aramu
+        is fictional, so every specific detail was made up. Judge the facts, not the fluency.
+    - text: "The tool must have found the information online, so it's probably accurate."
+      correct: false
+      why: >-
+        Only tools with search switched on can look things up, and even then there is nothing
+        real to find about a fictional district. Check what your tool can actually do.
+    - text: "The report is reliable because it is so detailed and well organised."
+      correct: false
+      why: >-
+        Detail and structure make invented content more convincing, not more accurate. A chat
+        tool writes just as confidently when it is wrong.
+    - text: "The figures are probably rough but close enough for a first report."
+      correct: false
+      why: >-
+        Invented figures aren't rough versions of real ones; they have no connection to the
+        situation at all. Supply the field notes and verify every figure.

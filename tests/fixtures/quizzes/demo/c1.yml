@@ -1,0 +1,9 @@
+- id: demo-c1-q1
+  question: "Which step comes first?"
+  options:
+    - text: "Write a detailed prompt"
+      correct: false
+      why: "A prompt is only as good as your understanding of the task."
+    - text: "Break the task into sub-tasks"
+      correct: true
+      why: "Decomposition tells you which parts AI should do."

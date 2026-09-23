@@ -1,0 +1,191 @@
+- id: lit-c4-q1
+  question: >-
+    You ask the chat tool, with no documents attached, "How many households are displaced in
+    Aramu district?" It replies with a precise figure. Where did that figure most likely come
+    from?
+  options:
+    - text: "From the latest field reports, which the AI reads automatically."
+      correct: false
+      why: >-
+        The AI can't see your field reports unless you paste them, upload them or your tool
+        searches a document store they are in. With nothing on the desk, it has no access to
+        them.
+    - text: "It was generated from the model's general memory and patterns, so it is most likely invented."
+      correct: true
+      why: >-
+        Correct. With no documents in the context, the model answers from training, which
+        knows nothing about a fictional district's flood. A precise-looking number is a
+        plausible guess, not a fact.
+    - text: "From the internet, so it is current and reliable."
+      correct: false
+      why: >-
+        Some tools can search the web, but they usually show sources when they do. Even then,
+        web results are not automatically reliable, and your internal field figures are not on
+        the web.
+    - text: "From a database of official statistics built into every enterprise AI tool."
+      correct: false
+      why: >-
+        No such built-in database exists. The model has general training data plus whatever you
+        or your tool put in front of it. Treat an unsourced figure as unverified.
+
+- id: lit-c4-q2
+  question: >-
+    Midway through a long chat with three uploaded reports, the AI stops following your early
+    instruction to "write 'not stated' for missing figures" and starts estimating. What is the
+    most likely explanation?
+  options:
+    - text: "The AI has decided your instruction was wrong and is overriding it."
+      correct: false
+      why: >-
+        The model doesn't make deliberate decisions to overrule you. It is predicting text from
+        what is in its context, and your instruction has become less prominent there.
+    - text: "Someone else in your organization changed the tool's settings during the chat."
+      correct: false
+      why: >-
+        Possible in theory, but very unlikely and not the usual cause. Long conversations
+        losing early instructions is a common, well-known pattern.
+    - text: "The AI is tired after a long conversation and needs a short break."
+      correct: false
+      why: >-
+        Models don't get tired. The problem is the content of the context, not the time spent.
+    - text: "The context is long and crowded, so the early instruction is being dropped, summarized or given less attention."
+      correct: true
+      why: >-
+        Correct. Everything shares the same context window. As it fills, tools may drop or
+        compress older messages, and instructions far from the end get less attention. Restate
+        the rule, or start a new chat with a clean brief.
+
+- id: lit-c4-q3
+  question: >-
+    Your team pastes the same reporting template, style guide and two approved past SitReps into
+    every new chat, every week. What is the best improvement, if your tool supports it and is
+    approved for the material?
+  options:
+    - text: "Set up a project (or knowledge base) holding those documents and standing instructions, and work inside it."
+      correct: true
+      why: >-
+        Correct. A project keeps reusable reference material and instructions in one place, so
+        everyone starts from the same brief. Keep it tidy and remove outdated versions.
+    - text: "Stop giving examples and the template; the AI already knows what a SitRep looks like."
+      correct: false
+      why: >-
+        The AI knows what a generic SitRep looks like, not your office's format, headings or
+        style. Removing the material makes answers more generic, not better.
+    - text: "Upload every SitRep from the last five years so the AI has as much as possible."
+      correct: false
+      why: >-
+        More is not better. Old, duplicate and outdated material distracts the model and can
+        make it follow an out-of-date format. Curate a small, current set.
+    - text: "Ask the AI to remember the template permanently at the start of each chat."
+      correct: false
+      why: >-
+        Asking in a message doesn't create memory. Unless your tool has a memory or project
+        feature switched on, a new chat starts from zero.
+
+- id: lit-c4-q4
+  question: >-
+    Your project holds 400 documents. You ask, "Summarize everything these documents say about
+    the last three years of the response." The answer is fluent but seems thin. Why?
+  options:
+    - text: "The AI read all 400 documents but chose to leave most details out to keep it short."
+      correct: false
+      why: >-
+        In a large project the AI usually doesn't read everything. It searches and retrieves a
+        handful of passages, so most documents never reach the desk.
+    - text: "The documents must be corrupted; a working tool would cover all of them."
+      correct: false
+      why: >-
+        Nothing is broken. This is how retrieval works: it's designed for specific questions,
+        not for "everything at once".
+    - text: "The tool retrieved only a few matching chunks, so the summary covers those, not the whole collection."
+      correct: true
+      why: >-
+        Correct. RAG works like an open-book exam: find the relevant pages, then answer. For
+        whole-collection questions, choose a smaller set of documents yourself and ask the AI
+        to read them all, or break the question into specific parts.
+    - text: "The question was not polite or detailed enough."
+      correct: false
+      why: >-
+        More detail can help focus a search, but the underlying limit is that only a few
+        chunks are retrieved. Rewording won't make the tool read 400 documents.
+
+- id: lit-c4-q5
+  question: >-
+    You paste two field documents and ask, "How many households are displaced in Dorra?"
+    Neither document gives a figure for Dorra. Which answer shows the AI is well grounded?
+  options:
+    - text: "\"Around 300 households, based on similar villages in the area.\""
+      correct: false
+      why: >-
+        This is an estimate the documents don't support. It sounds reasonable, which is exactly
+        what makes it dangerous in a SitRep.
+    - text: "\"Not found in the documents provided. Doc B notes Dorra has not yet been reached.\""
+      correct: true
+      why: >-
+        Correct. The AI admits the gap and points to the relevant sourced fact. This is the
+        behaviour a "not found" rule is designed to produce.
+    - text: "\"1,150 households [Doc B].\""
+      correct: false
+      why: >-
+        That figure is from Doc B, but it covers registration at the school and community hall,
+        not Dorra. A real citation attached to the wrong claim is a common grounding failure.
+    - text: "\"Dorra is a village in Northern Veloria with a population of about 2,000.\""
+      correct: false
+      why: >-
+        This answers a different question from general "knowledge", and for a fictional place
+        that knowledge is invented. It doesn't admit the documents are silent.
+
+- id: lit-c4-q6
+  question: >-
+    Doc A (12 May) estimates 1,450 displaced households. Doc B (14 May) records 1,150 from
+    registration. You ask the AI for "one number for the headline". What should a good grounded
+    answer do?
+  options:
+    - text: "Give 1,300, the average, as a fair compromise."
+      correct: false
+      why: >-
+        An average appears in neither document and hides the fact that the sources disagree.
+        It creates a new, unsourced figure.
+    - text: "Give 1,450, because the larger figure is safer for fundraising."
+      correct: false
+      why: >-
+        Choosing a figure because it suits a purpose is not grounding. It also hides the
+        conflict from the reader.
+    - text: "Refuse to answer until the two organizations agree."
+      correct: false
+      why: >-
+        Refusing is unhelpful. The honest answer is available: report both figures, their
+        sources and dates, and the conflict.
+    - text: "Show both figures with sources, dates and methods, flag that they conflict, and note which one partners agreed to use."
+      correct: true
+      why: >-
+        Correct. A conflict is information the reader needs. Doc B is newer, is based on
+        registration and was agreed for planning, but the SitRep should say so openly rather than
+        silently choosing.
+
+- id: lit-c4-q7
+  question: >-
+    You ask the AI, with no documents and no web search, "What are the current funding
+    guidelines for our pooled fund?" It answers confidently. What is the main risk?
+  options:
+    - text: "The answer may reflect the model's training data from before its knowledge cutoff, presented as if current."
+      correct: true
+      why: >-
+        Correct. The model's memory stops at its knowledge cutoff, and it may not flag that its
+        information is old. For anything recent or organization-specific, paste the current
+        guideline yourself.
+    - text: "There is no risk; models are updated every day with the latest information."
+      correct: false
+      why: >-
+        Models are trained up to a cutoff date and then released. They are not retrained
+        daily. Web search can add recent information, but it was off here.
+    - text: "The AI will always say \"I don't know\" if it isn't sure, so a confident answer is safe."
+      correct: false
+      why: >-
+        Models often answer confidently even when their information is outdated or missing.
+        Confidence is not a sign of accuracy.
+    - text: "The only risk is that the answer might be in the wrong language."
+      correct: false
+      why: >-
+        Language can be set in the prompt. The bigger risk is that the content itself is out of
+        date or invented.

@@ -1,0 +1,187 @@
+- id: lit-c6-q1
+  question: >-
+    An AI-drafted SitRep says "3,400 people displaced in Aramu district". The field notes say
+    "approx 1,200 households displaced (partly estimated)". What is the best description of the
+    problem?
+  options:
+    - text: "No problem: the AI converted households to people using a typical family size, which is helpful."
+      correct: false
+      why: >-
+        The conversion may look helpful, but it is an unstated assumption presented as a fact. The
+        family size is a guess, the qualifier "partly estimated" is lost, and a reader will quote
+        3,400 as a count. Any conversion must be done and labelled by a person.
+    - text: "The number changed units and lost its qualifier, so a partly estimated household figure now looks like a firm count of people."
+      correct: true
+      why: >-
+        Correct. This is the classic "checking meaning, not just words" error: units changed
+        (households to people) and "approx" and "partly estimated" disappeared. Always compare
+        units, qualifiers, scope, time and certainty.
+    - text: "The AI made a small rounding error that doesn't matter for a SitRep."
+      correct: false
+      why: >-
+        This isn't rounding. The figure has been transformed into a different measure. Donors and
+        planners act on these numbers, so a changed unit can change funding and supply decisions.
+    - text: "The notes must be wrong, because the AI has access to more data than the field team."
+      correct: false
+      why: >-
+        The AI has no data about fictional Aramu district beyond what you pasted. When its answer
+        differs from your source, the source wins until proven otherwise.
+
+- id: lit-c6-q2
+  question: >-
+    A colleague's briefing draft includes a reference suggested by an AI tool: authors, year,
+    journal, volume and page numbers. It looks perfect. What should they do before using it?
+  options:
+    - text: "Nothing: a reference with volume and page numbers is too specific to be invented."
+      correct: false
+      why: >-
+        Specific detail is exactly what AI tools are good at generating. The model has seen
+        millions of references and produces text shaped like one. Precision is not proof.
+    - text: "Ask the AI tool \"Is this reference real?\" and keep it if the tool says yes."
+      correct: false
+      why: >-
+        The AI will often confirm its own invention with a confident explanation. The check has to
+        happen outside the AI: a library catalogue, a scholarly search or the publisher's site.
+    - text: "Keep the claim but delete the reference, so nobody can check it."
+      correct: false
+      why: >-
+        If the reference was invented, the claim almost certainly came from the same place. Removing
+        the reference hides the problem instead of fixing it.
+    - text: "Find the source in a catalogue or on the publisher's site, open it, and confirm it says what the draft claims."
+      correct: true
+      why: >-
+        Correct. Resolve the citation yourself: find it, open it, and check the specific claim.
+        Real sources are also often misquoted, so finding the article is only half the job.
+
+- id: lit-c6-q3
+  question: >-
+    After six weeks of excellent AI-drafted SitReps, a reporting officer stops checking the
+    figures because "it's always right". What is this an example of?
+  options:
+    - text: "Automation bias: over-trusting a system because it has been reliable and sounds confident."
+      correct: true
+      why: >-
+        Correct. A string of good answers lowers our guard, which is exactly when a quiet error gets
+        through. Decide how much to check based on the stakes, not on the tool's recent record.
+    - text: "Sensible efficiency: once a tool has proven itself, checking is wasted time."
+      correct: false
+      why: >-
+        Past accuracy doesn't guarantee the next answer. Hallucinations are occasional and
+        unpredictable, and they don't come with a warning. For figures others will rely on,
+        checking stays part of the job.
+    - text: "Data bias: the model's training data over-represents certain regions."
+      correct: false
+      why: >-
+        Data bias is real, but it's a property of the model. This scenario is about the human
+        reviewer's behaviour: trusting the output without checking.
+    - text: "Prompt injection: the tool has been manipulated into seeming trustworthy."
+      correct: false
+      why: >-
+        Nothing here involves hidden instructions from an attacker. The risk comes from the
+        reviewer's own over-trust, which is a well-known human tendency.
+
+- id: lit-c6-q4
+  question: >-
+    You ask the AI to review its own SitRep against the field notes, and it replies "All figures
+    are supported by the notes." What should you conclude?
+  options:
+    - text: "The SitRep is verified and can be sent."
+      correct: false
+      why: >-
+        The checker is the same model with the same blind spots, and it can confirm its own
+        errors confidently. A self-check is useful but doesn't replace your verification.
+    - text: "Self-checks are useless and you shouldn't have asked."
+      correct: false
+      why: >-
+        Self-checks often catch real slips and are worth running. The mistake is treating them as
+        the final word, not asking for them.
+    - text: "The self-check is a helpful first pass, but you still need to trace the key figures to the notes yourself."
+      correct: true
+      why: >-
+        Correct. Think of it like a spell-checker: worth running, catches a lot, but not enough on
+        its own. It can even "quote" support that isn't in the source, so look for yourself.
+    - text: "Ask it the same question again until it finds a problem."
+      correct: false
+      why: >-
+        Repeating the question may produce a different answer, but a different answer is no more
+        reliable. The only reliable check is comparing with the source yourself.
+
+- id: lit-c6-q5
+  question: >-
+    A field note says the Lomi women's group and the village council organized an evacuation.
+    The AI summary credits "local leaders" and mentions women only as "vulnerable groups". What
+    is the best response?
+  options:
+    - text: "Accept it; the summary is shorter and the facts are broadly right."
+      correct: false
+      why: >-
+        Each sentence may be defensible, but the summary changes who acted and who was helped.
+        Bias often looks like this: not false, just skewed in who gets credit and who disappears.
+    - text: "Recognise output bias, correct the summary so it reflects who actually acted, and check for other groups that were dropped."
+      correct: true
+      why: >-
+        Correct. Check who acts and who is acted upon, and count who appears compared with the
+        source. Fix the wording yourself, and make "who's missing?" a routine question.
+    - text: "Switch to another AI tool, because this one is biased and the others are not."
+      correct: false
+      why: >-
+        All current models learn from large amounts of text that carries social patterns, so all
+        can show bias. Changing tools doesn't remove the need to check.
+    - text: "Add \"Do not be biased\" to the prompt and trust the result."
+      correct: false
+      why: >-
+        A general instruction may help slightly, but it can't guarantee unbiased output. You find
+        bias by comparing the output with the source, not by asking for its absence.
+
+- id: lit-c6-q6
+  question: >-
+    Using the traffic-light rule, which of these tasks is RED: don't use a general AI chat tool
+    for it?
+  options:
+    - text: "Rewording a meeting invitation to sound friendlier."
+      correct: false
+      why: >-
+        This is green: low stakes, no sensitive data, and you can easily judge the quality
+        yourself.
+    - text: "Drafting a SitRep from fictional field notes for the country director."
+      correct: false
+      why: >-
+        This is amber: others will rely on the figures, so it needs the full fact-checking routine
+        and a named human checker. But it's a good use of AI with those safeguards.
+    - text: "Summarizing a published, public assessment report."
+      correct: false
+      why: >-
+        This is green or low amber: public material, and the summary can be checked against the
+        report. Check any figures you plan to reuse.
+    - text: "Deciding which named households qualify for cash assistance, from a registration list."
+      correct: true
+      why: >-
+        Correct. This is a final decision about people using personal data. It needs accountable
+        humans, established procedures and a route to appeal. AI can reflect bias and cannot be
+        held accountable.
+
+- id: lit-c6-q7
+  question: >-
+    Your team adds a "human review" step to its AI-assisted donor updates. Which version of that
+    step is a real check rather than a rubber stamp?
+  options:
+    - text: "A manager clicks \"approve\" on each update within one minute of receiving it."
+      correct: false
+      why: >-
+        One minute is not enough to trace figures to sources. Fast approval without looking is a
+        rubber stamp, and it's worse than no step because everyone assumes someone checked.
+    - text: "The same AI tool reviews the update a second time before sending."
+      correct: false
+      why: >-
+        That is a self-check, not human review. It can help as a first pass but has the same blind
+        spots as the draft.
+    - text: "A reviewer with the source notes confirms every figure, checks no personal names appear, and can stop the update."
+      correct: true
+      why: >-
+        Correct. A real checkpoint says exactly what is checked, and the checker has the time, the
+        source material, the expertise and the authority to say no.
+    - text: "Anyone on the team can raise concerns after the update is published."
+      correct: false
+      why: >-
+        Feedback after publication is useful, but it's not a checkpoint. Human in the loop means
+        review before the output has real effects.

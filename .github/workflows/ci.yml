@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: pip install -r requirements.txt
+      - name: Site and quiz tests (includes strict builds of both editions)
+        run: pytest tests -q
+      - name: Quiz script tests
+        run: node --test tests/quiz.test.mjs
+      - name: Lab tests (fake LLM, no API key needed)
+        run: bash scripts/test_labs.sh
+      - name: Offline browser check (file://, network blocked)
+        run: |
+          mkdocs build --strict
+          CHROME="$(which google-chrome)" node scripts/check_site.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: site-check-screenshots
+          path: .checks/

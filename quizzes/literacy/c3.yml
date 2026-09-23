@@ -1,0 +1,189 @@
+- id: lit-c3-q1
+  question: >-
+    You ask an AI tool to "Write a sitrep about the floods" and get a confident, generic report
+    with figures you don't recognise. What is the most likely cause?
+  options:
+    - text: "The AI tool is broken or low quality and should not be used for reporting."
+      correct: false
+      why: >-
+        The tool did what it was asked: it wrote a sitrep. With no information about your
+        floods it filled every gap with plausible guesses. A better brief usually fixes this
+        without changing tools.
+    - text: "The prompt gave no context, so the AI filled the gaps with generic guesses."
+      correct: true
+      why: >-
+        Correct. The AI can only use what you give it. Without field notes, audience, format or
+        a rule about missing figures, it falls back on the most "average" answer and invents
+        details that sound right.
+    - text: "The prompt was not polite enough; adding \"please\" would have produced real figures."
+      correct: false
+      why: >-
+        Politeness is harmless but it adds no information. The AI still wouldn't know anything
+        about your floods, so it would still have to guess.
+    - text: "The AI needs to search the internet first; once it can, prompts don't matter."
+      correct: false
+      why: >-
+        Even with access to more information, the AI still needs to know which floods, for whom
+        and in what format. Your field notes are not on the internet either. Good briefing
+        matters whatever the tool can access.
+
+- id: lit-c3-q2
+  question: >-
+    Which of the six building blocks do people most often leave out, even though it usually
+    adds the most value?
+  options:
+    - text: "Role (\"You are an expert…\")"
+      correct: false
+      why: >-
+        Role is the block people remember most, and it helps a little with tone and vocabulary.
+        But it gives the AI no facts about your situation. A role with no context achieves
+        little.
+    - text: "Format (length, headings, bullets)"
+      correct: false
+      why: >-
+        Format saves editing time and is worth including, but a well-formatted answer built on
+        guesses is still wrong. Format shapes the answer; it doesn't supply the substance.
+    - text: "Context (who it's for, why, and the background the AI can't know)"
+      correct: true
+      why: >-
+        Correct. The AI can't see your office, your files or your reader. Context is what turns
+        a generic answer into one that fits your situation, and it's the block people most
+        often assume is "obvious".
+    - text: "Capital letters for the most important instructions"
+      correct: false
+      why: >-
+        Capital letters are not a building block. Shouting doesn't make the AI obey. A clear
+        instruction, placed where it's easy to see and with the reason given, works better.
+
+- id: lit-c3-q3
+  question: >-
+    Yesterday you spent 20 minutes explaining your programme to the AI in a chat. Today you
+    open a new chat and ask for "the usual weekly summary". What should you expect?
+  options:
+    - text: "It probably won't know your programme. Unless your tool has a memory or project feature switched on, a new chat starts from zero."
+      correct: true
+      why: >-
+        Correct. The AI sees the messages in the current conversation. Most enterprise tools
+        don't carry context between chats unless a clearly labelled memory, project or custom
+        instructions feature is used. Re-paste the key context or save it as a template.
+    - text: "It will remember everything, because the AI learns from each conversation."
+      correct: false
+      why: >-
+        This is a common misconception. The model does not learn from your chats as you use it.
+        What it "knows" in a conversation is only the text in that conversation, plus any
+        standing instructions or memory features your tool provides.
+    - text: "It will remember, but only if you ask politely."
+      correct: false
+      why: >-
+        Politeness can't bring back a conversation the AI can't see. If the earlier chat isn't
+        available to it, no wording will recover it.
+    - text: "It will refuse to answer until you open yesterday's chat."
+      correct: false
+      why: >-
+        It won't refuse. It will usually produce a confident, generic "weekly summary" based on
+        guesses, which is more dangerous than a refusal because it looks plausible.
+
+- id: lit-c3-q4
+  question: >-
+    The AI keeps writing donor updates that are accurate but in the wrong tone: too formal and
+    too long. What is usually the quickest fix?
+  options:
+    - text: "Make the prompt much longer, with several paragraphs describing the tone."
+      correct: false
+      why: >-
+        Longer isn't automatically better. Tone is hard to describe in words, and extra paragraphs
+        can bury the key instruction. Showing is usually faster than telling.
+    - text: "Write the instruction in capital letters: \"BE WARM AND SHORT!!!\""
+      correct: false
+      why: >-
+        Shouting doesn't make the instruction clearer. The AI still has to guess what "warm"
+        means to you.
+    - text: "Start a new chat and send the same prompt again until the tone comes out right."
+      correct: false
+      why: >-
+        Answers do vary, so you might get lucky, but repeating an unclear prompt is a slot
+        machine, not a method. Change the prompt instead.
+    - text: "Paste two or three past updates you like and ask it to match their style (few-shot)."
+      correct: true
+      why: >-
+        Correct. Examples show length, tone and structure at once, and the AI is very good at
+        continuing a pattern. Choose examples you're happy for it to copy, flaws included.
+
+- id: lit-c3-q5
+  question: >-
+    You ask the AI to total displaced households from three teams' figures. Some villages
+    appear in two teams' reports. Which prompt is most likely to give a result you can check?
+  options:
+    - text: "\"What's the total? Just the number, no explanation.\""
+      correct: false
+      why: >-
+        A bare number gives the AI no room to notice the double-counting, and gives you nothing
+        to check. You won't see whether villages were counted twice.
+    - text: "\"List each team's figure and villages, flag any village counted twice and any estimates, then give the total.\""
+      correct: true
+      why: >-
+        Correct. Laying out the steps (chain of thought) helps the AI catch overlaps, and the
+        visible working lets you spot errors. You still need to check the key numbers yourself.
+    - text: "\"You are the world's best statistician. Give me the total.\""
+      correct: false
+      why: >-
+        A grand role doesn't add method or information. The AI still jumps straight to a number
+        without looking for the overlap.
+    - text: "\"Give me the total. Be 100% accurate.\""
+      correct: false
+      why: >-
+        Asking for accuracy doesn't create it. The AI can't be more accurate on command; it needs
+        a method, such as working through the figures step by step, and you need to verify.
+
+- id: lit-c3-q6
+  question: >-
+    The AI's first draft of a SitRep is about 70% right. What is the best next step?
+  options:
+    - text: "Give up; if the first answer isn't right, AI isn't suited to this task."
+      correct: false
+      why: >-
+        This treats the tool like a vending machine. A first answer is a first draft. Most of
+        the value often comes from the second and third messages.
+    - text: "Reply \"That's wrong, try again.\""
+      correct: false
+      why: >-
+        This tells the AI something is wrong but not what. It may change the parts that were
+        fine and keep the parts that weren't.
+    - text: "Reply with specific changes, e.g. \"Move water needs to the top, cut to 150 words, and mark the Dorra figures as 'not stated'.\""
+      correct: true
+      why: >-
+        Correct. Specific feedback, like the comments you'd give a colleague's draft, lets the
+        AI fix exactly what's wrong and keep what's right.
+    - text: "Copy the draft into the final report as-is; you can correct it later if anyone complains."
+      correct: false
+      why: >-
+        AI drafts can contain invented or misread figures. You are responsible for anything you
+        send. Fix and verify it before it goes out.
+
+- id: lit-c3-q7
+  question: >-
+    You want the AI to summarize a staff member's performance review, which includes their name
+    and a medical absence. What should you do first?
+  options:
+    - text: "Check whether your approved tool is cleared for this kind of personal data, and if in doubt, remove identifying details or don't paste it."
+      correct: true
+      why: >-
+        Correct. Personal and medical information needs particular care. Use only approved tools,
+        only for data they are approved for, and anonymise when unsure. Class 8 covers this in
+        depth.
+    - text: "Paste it; enterprise AI tools are always safe for any data."
+      correct: false
+      why: >-
+        An enterprise tool is safer than a public one, but each tool is approved for particular
+        kinds of data. "Enterprise" doesn't mean "approved for everything". Check before you
+        paste.
+    - text: "Paste it, but add \"Keep this confidential\" to the prompt."
+      correct: false
+      why: >-
+        An instruction in a prompt doesn't control how the tool stores, logs or processes your
+        data. Confidentiality depends on the tool and its approval, not on what you ask the AI.
+    - text: "Paste it, then delete the chat afterwards."
+      correct: false
+      why: >-
+        Deleting the chat from your screen may not remove the data from every log or system.
+        The decision about whether the data may be shared has to come before you paste it.

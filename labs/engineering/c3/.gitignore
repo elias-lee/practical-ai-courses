@@ -1,0 +1,8 @@
+# Secrets never go into git (SPEC R8)
+.env
+*.key
+
+# Local environments and caches
+.venv/
+__pycache__/
+.pytest_cache/
