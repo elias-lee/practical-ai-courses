@@ -32,3 +32,4 @@ jobs:
         with:
           name: site-check-screenshots
           path: .checks/
+          include-hidden-files: true
