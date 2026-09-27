@@ -118,7 +118,7 @@ async function iconPainted(selector, file) {
 // ---- Home
 await go("index.html");
 await shot("home.png");
-check("home renders path cards", (await evaluate(`document.querySelectorAll('.path-card').length`)) === 2);
+check("home shows both tracks and the hero", (await evaluate(`document.querySelectorAll('.home-track').length + document.querySelectorAll('.transform').length`)) === 3);
 
 // ---- Literacy C3: quiz, copy buttons, sidebars, completion
 await go("literacy/c3.html");
@@ -175,8 +175,8 @@ await shot("search.png");
 // ---- Engineering C6
 await go("engineering/c6.html");
 await shot("c6-top.png");
-const c6 = await evaluate(`({ questions: document.querySelectorAll('.quiz-q').length, sidebars: document.querySelectorAll('details.info').length, diagram: document.querySelector('.diagram img')?.naturalWidth > 0 })`);
-check("c6 quiz, sidebars and diagram present", c6.questions > 0 && c6.sidebars > 0 && c6.diagram, c6);
+const c6 = await evaluate(`({ questions: document.querySelectorAll('.quiz-q').length, sidebars: document.querySelectorAll('details.info').length, diagram: document.querySelectorAll('.figure svg').length > 0, header: !!document.querySelector('.class-head .class-steps') })`);
+check("c6 quiz, sidebars, diagrams and class header present", c6.questions > 0 && c6.sidebars > 0 && c6.diagram && c6.header, c6);
 
 // ---- Every class page: quiz rendered, sidebars resolved, completion button present
 const PAGES = [

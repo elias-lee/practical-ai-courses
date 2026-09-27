@@ -9,8 +9,8 @@ copyright: Practical AI — an independent learning resource.
 theme:
   name: material
   font: false
-  icon:
-    logo: material/school-outline
+  logo: assets/img/logo.svg
+  favicon: assets/img/logo.svg
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -40,6 +40,7 @@ plugins:
 
 hooks:
   - hooks/quiz.py
+  - hooks/design.py
 
 # Snippet sources are included into pages, never built on their own.
 # Instructor pages ship only in the instructor edition (mkdocs.instructor.yml).
@@ -60,7 +61,7 @@ markdown_extensions:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.highlight:
-      anchor_linenums: true
+      pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.superfences
   - pymdownx.tabbed:
@@ -85,25 +86,25 @@ nav:
   - Home: index.md
   - AI Literacy:
       - literacy/index.md
-      - "Class 1 · What AI Is": literacy/c1.md
-      - "Class 2 · How Chatbots Work": literacy/c2.md
-      - "Class 3 · Prompting Well": literacy/c3.md
-      - "Class 4 · Giving AI the Right Information": literacy/c4.md
-      - "Class 5 · AI at Work": literacy/c5.md
-      - "Class 6 · Checking AI": literacy/c6.md
-      - "Class 7 · Agents & Automation": literacy/c7.md
-      - "Class 8 · Safe & Responsible AI": literacy/c8.md
+      - "1. What AI Is": literacy/c1.md
+      - "2. How Chatbots Work": literacy/c2.md
+      - "3. Prompting Well": literacy/c3.md
+      - "4. Giving AI the Right Information": literacy/c4.md
+      - "5. AI at Work": literacy/c5.md
+      - "6. Checking AI": literacy/c6.md
+      - "7. Agents & Automation": literacy/c7.md
+      - "8. Safe & Responsible AI": literacy/c8.md
   - AI Engineering:
       - engineering/index.md
-      - "Pre-work · Setup": engineering/prework.md
-      - "Class 1 · Foundations": engineering/c1.md
-      - "Class 2 · Prompting & Structured Outputs": engineering/c2.md
-      - "Class 3 · Building with Code": engineering/c3.md
-      - "Class 4 · Context Engineering & RAG": engineering/c4.md
-      - "Class 5 · Harness & Tools": engineering/c5.md
-      - "Class 6 · Agents & Orchestration": engineering/c6.md
-      - "Class 7 · Evals & Observability": engineering/c7.md
-      - "Class 8 · Security & Production": engineering/c8.md
+      - "Pre-work: Setup": engineering/prework.md
+      - "1. Foundations": engineering/c1.md
+      - "2. Prompting & Structured Outputs": engineering/c2.md
+      - "3. Building with Code": engineering/c3.md
+      - "4. Context Engineering & RAG": engineering/c4.md
+      - "5. Harness & Tools": engineering/c5.md
+      - "6. Agents & Orchestration": engineering/c6.md
+      - "7. Evals & Observability": engineering/c7.md
+      - "8. Security & Production": engineering/c8.md
   - Reference:
       - AI Map: ai-map.md
       - Glossary: glossary.md

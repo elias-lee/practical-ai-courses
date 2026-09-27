@@ -1,30 +1,26 @@
 # AI Literacy
 
-**For non-technical colleagues. No coding required.**
+For anyone who uses AI at work. No coding. By the end of this course you can use your
+organization's approved AI tools confidently and safely, explain how they work in plain language,
+check what they tell you, and say clearly what you need when you ask for an AI system to be built.
 
-By the end of this course you will be able to use your organization's approved AI tools
-confidently and safely, explain how they work in plain language, check their output, and
-describe what you need when you commission an AI system.
+Each class takes about three hours with a facilitator: a warm-up quiz, the concept, a live demo,
+a hands-on lab in pairs, a quiz that explains every answer, and an exit ticket. You need access
+to an AI chat tool your organization has approved.
 
-**Format:** 8 classes of about 3 hours: warm-up quiz, concept, live demo, hands-on lab in pairs,
-check-your-understanding quiz and exit ticket.
-**You need:** access to your organization's approved enterprise AI chat tool.
-
-## Classes
-
-| # | Class | You will learn to… | Progress |
-|---|---|---|---|
-| 1 | [What AI is](c1.md) | Tell AI, machine learning and generative AI apart; separate hype from reality | <span data-progress-for="literacy/c1.html"></span> |
-| 2 | [How chatbots work](c2.md) | Explain tokens, prediction and why chatbots make things up | <span data-progress-for="literacy/c2.html"></span> |
-| 3 | [Prompting well](c3.md) | Write clear, structured prompts and improve answers step by step | <span data-progress-for="literacy/c3.html"></span> |
-| 4 | [Giving AI the right information](c4.md) | Use context, file uploads and grounded answers (RAG) | <span data-progress-for="literacy/c4.html"></span> |
-| 5 | [AI at work](c5.md) | Draft, summarize, translate and analyse with AI | <span data-progress-for="literacy/c5.html"></span> |
-| 6 | [Checking AI](c6.md) | Fact-check, spot bias and know when not to use AI | <span data-progress-for="literacy/c6.html"></span> |
-| 7 | [Agents and automation](c7.md) | Understand agents and commission an AI system well | <span data-progress-for="literacy/c7.html"></span> |
-| 8 | [Safe and responsible AI](c8.md) | Protect data, resist manipulation, understand AI governance; final project | <span data-progress-for="literacy/c8.html"></span> |
+<ol class="hub-classes">
+<li><a href="c1.html">What AI is</a><span>Tell AI, machine learning and generative AI apart, and separate hype from reality.</span><span data-progress-for="literacy/c1.html"></span></li>
+<li><a href="c2.html">How chatbots work</a><span>Tokens, prediction, and why chatbots make things up.</span><span data-progress-for="literacy/c2.html"></span></li>
+<li><a href="c3.html">Prompting well</a><span>Write clear, structured prompts and improve answers step by step.</span><span data-progress-for="literacy/c3.html"></span></li>
+<li><a href="c4.html">Giving AI the right information</a><span>Context, file uploads and grounded answers with citations.</span><span data-progress-for="literacy/c4.html"></span></li>
+<li><a href="c5.html">AI at work</a><span>Draft, summarize, translate and analyse, and know what to keep for yourself.</span><span data-progress-for="literacy/c5.html"></span></li>
+<li><a href="c6.html">Checking AI</a><span>Fact-check, spot bias, and know when not to use AI.</span><span data-progress-for="literacy/c6.html"></span></li>
+<li><a href="c7.html">Agents and automation</a><span>What agents can do, and how to ask for an AI system well.</span><span data-progress-for="literacy/c7.html"></span></li>
+<li><a href="c8.html">Safe and responsible AI</a><span>Protect data, resist manipulation, understand AI governance, and present your final project.</span><span data-progress-for="literacy/c8.html"></span></li>
+</ol>
 
 ## The thread through the course
 
-Every class works on the **SitRep Assistant** case study: turning messy field reports into a
-clear situation report for decision-makers. Each class adds one skill until, in Class 8, you
-design and present an AI-assisted workflow from your own job.
+Every class works on the SitRep case study: turning messy field notes into a clear situation
+report for decision-makers. Each class adds one skill until, in Class 8, you redesign a workflow
+from your own job and present it.

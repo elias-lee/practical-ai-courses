@@ -55,7 +55,8 @@ def _inline(text: str) -> str:
 def render_quiz(questions: list[dict], quiz_id: str) -> str:
     parts = [f'<div class="quiz" data-quiz-id="{html.escape(quiz_id)}">']
     for n, q in enumerate(questions, 1):
-        parts.append(f'<div class="quiz-q" data-qid="{html.escape(q["id"])}">')
+        qid = html.escape(q["id"])
+        parts.append(f'<div class="quiz-q" id="{qid}" data-qid="{qid}">')
         parts.append(
             f'<p class="quiz-question"><span class="quiz-num">{n}</span> {_inline(q["question"])}</p>'
         )

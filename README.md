@@ -54,8 +54,9 @@ python3 -m venv .venv
 .venv/bin/mkdocs serve                                  # learner edition at http://127.0.0.1:8000
 .venv/bin/mkdocs serve -f mkdocs.instructor.yml         # instructor edition
 .venv/bin/pytest tests -q && node --test tests/quiz.test.mjs    # site tests
-PYTEST=.venv/bin/pytest bash scripts/test_labs.sh                 # every lab, one at a time
+bash scripts/test_labs.sh                                         # every lab, one at a time
 .venv/bin/mkdocs build && node scripts/check_site.mjs    # browser check: file://, no network
+node scripts/screenshots.mjs index.html literacy/c3.html  # design review: light/dark, desktop/phone
 ```
 
 `check_site.mjs` opens the built site in headless Chrome the way an offline reader would (from

@@ -11,12 +11,19 @@
     return "Score: " + correct + " / " + total;
   }
 
+  // Shown once every question is answered: which questions to revisit.
+  function summaryText(missed, total) {
+    if (missed.length === 0) return "All " + total + " correct. Well done.";
+    var list = missed.length === 1 ? "question " + missed[0] : "questions " + missed.slice(0, -1).join(", ") + " and " + missed[missed.length - 1];
+    return "Worth another look: " + list + ". Read the explanation under each answer.";
+  }
+
   function progressKey(pagePath) {
     return "aicourse:done:" + pagePath;
   }
 
   if (typeof module !== "undefined" && module.exports) {
-    module.exports = { scoreText: scoreText, progressKey: progressKey };
+    module.exports = { scoreText: scoreText, summaryText: summaryText, progressKey: progressKey };
     return;
   }
 
@@ -43,12 +50,37 @@
     reset.textContent = "Try again";
     reset.hidden = true;
     scoreEl.after(reset);
+    var summary = document.createElement("div");
+    summary.className = "quiz-summary";
+    summary.hidden = true;
+    summary.setAttribute("aria-live", "polite");
+    scoreEl.after(summary);
 
     function update() {
       var answered = quiz.querySelectorAll(".quiz-q.is-answered").length;
       var correct = quiz.querySelectorAll(".quiz-option.is-correct").length;
       scoreEl.textContent = scoreText(correct, answered, total);
       reset.hidden = answered === 0;
+      summary.hidden = answered < total;
+      if (answered === total) {
+        var missed = [];
+        questions.forEach(function (q, i) { if (!q.querySelector(".quiz-option.is-correct")) missed.push(i + 1); });
+        summary.textContent = "";
+        var p = document.createElement("p");
+        p.textContent = summaryText(missed, total);
+        summary.appendChild(p);
+        if (missed.length) {
+          var ul = document.createElement("ul");
+          missed.forEach(function (n) {
+            var q = questions[n - 1], li = document.createElement("li"), a = document.createElement("a");
+            a.href = "#" + q.id;
+            a.textContent = "Question " + n + ": " + q.querySelector(".quiz-question").textContent.replace(/^\s*\d+\s*/, "").slice(0, 90);
+            li.appendChild(a);
+            ul.appendChild(li);
+          });
+          summary.appendChild(ul);
+        }
+      }
     }
 
     questions.forEach(function (q) {
@@ -99,10 +131,11 @@
     el.appendChild(btn);
   }
 
-  // Course hub pages: <span data-progress-for="literacy/c3.html"></span>
+  // Course hub pages: <span data-progress-for="literacy/c3.html"></span> gets "✓ done".
+  // Class steppers (links) keep their number and are only marked as done.
   function initProgressBadge(el) {
     if (store.get(progressKey(el.dataset.progressFor)) === "1") {
-      el.textContent = "✓ done";
+      if (el.tagName !== "A") el.textContent = "✓ done";
       el.classList.add("is-done");
     }
   }

@@ -4,7 +4,9 @@
 # them in one process would let the first-imported module shadow the others.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-PYTEST="${PYTEST:-pytest}"
+if [ -z "${PYTEST:-}" ]; then
+  if [ -x .venv/bin/pytest ]; then PYTEST=.venv/bin/pytest; else PYTEST=pytest; fi
+fi
 status=0
 for lab in labs/engineering/*/; do
   echo "== ${lab}"
